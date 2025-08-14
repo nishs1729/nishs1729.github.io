@@ -1,0 +1,164 @@
+const mothContainer = document.getElementById('moths-container');
+const mothImages = [
+  
+    
+  
+    
+  
+    
+      '/assets/images/moths/mariposa.webp',
+    
+  
+    
+      '/assets/images/moths/moth1.gif',
+    
+  
+    
+      '/assets/images/moths/moth1.webp',
+    
+  
+    
+      '/assets/images/moths/moth11.gif',
+    
+  
+    
+      '/assets/images/moths/moth12.gif',
+    
+  
+    
+      '/assets/images/moths/moth13.gif',
+    
+  
+    
+      '/assets/images/moths/moth17.gif',
+    
+  
+    
+      '/assets/images/moths/moth18.gif',
+    
+  
+    
+      '/assets/images/moths/moth2.gif',
+    
+  
+    
+      '/assets/images/moths/moth2.webp',
+    
+  
+    
+      '/assets/images/moths/moth4.gif',
+    
+  
+    
+      '/assets/images/moths/moth5.gif',
+    
+  
+    
+      '/assets/images/moths/moth6.gif',
+    
+  
+    
+      '/assets/images/moths/moth7.gif',
+    
+  
+    
+      '/assets/images/moths/moth9.gif',
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+];
+
+function createMoth() {
+  const moth = document.createElement('img');
+  moth.src = mothImages[Math.floor(Math.random() * mothImages.length)];
+  moth.classList.add('moth');
+  
+  let x = Math.random() * window.innerWidth;
+  let y = Math.random() * window.innerHeight;
+  let angle = Math.random() * 2 * Math.PI;
+  let speed = Math.random() * 0.2;
+  let rotation = 0;
+
+  moth.style.left = `${x}px`;
+  moth.style.top = `${y}px`;
+  
+  mothContainer.appendChild(moth);
+
+  setTimeout(() => {
+    moth.style.opacity = 1;
+  }, 100);
+
+  function moveMoth() {
+    angle += (Math.random() - 0.5) * 0.1;
+    x += Math.cos(angle) * speed;
+    y += Math.sin(angle) * speed;
+
+    // Change rotation based on direction
+    rotation = angle * (180 / Math.PI) + 90;
+    moth.style.transform = `rotate(${rotation}deg)`;
+
+    moth.style.left = `${x}px`;
+    moth.style.top = `${y}px`;
+    requestAnimationFrame(moveMoth);
+  }
+
+  setTimeout(() => {
+    moth.style.opacity = 0;
+    setTimeout(() => {
+      if (moth.parentElement) {
+        mothContainer.removeChild(moth);
+      }
+    }, 5000);
+  }, Math.random() * 15000 + 1000);
+
+  moveMoth();
+}
+
+setInterval(createMoth, Math.random() * 3000 + 1000);

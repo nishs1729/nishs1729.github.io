@@ -1,0 +1,22 @@
+.matrix-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+
+  /* Define CSS custom properties for theme-aware colors */
+  @include themed( --matrix-text-color, rgba(0, 0, 0, 0.6), rgba(0, 255, 0, 0.6) );
+  @include themed( --matrix-bg-color, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1) );
+}
+
+#matrixCanvas {
+  display: block;
+  background-color: transparent; /* Canvas background will be handled by JS fillRect */
+}
+
+[data-theme="light"] .matrix-container {
+  display: none;
+}

@@ -1,0 +1,21 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ '/assets/css/moths_style.css' | relative_url }}">
+
+
+<div class="moths-container" id="moths-container"></div>
+
+{% if page.width == "thin" %}
+<div class="col-lg-10 mx-auto mt-5 markdown-body">
+  {{ content }}
+</div>
+
+{% else %}
+<div class="markdown-body">
+  {{ content }}
+</div>
+{% endif %}
+
+<script src="{{ '/assets/js/moths.js' | relative_url }}"></script>

@@ -1,0 +1,74 @@
+.cv-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin-top: 60px;
+}
+
+.cv-section {
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.cv-section-title {
+  flex: 0 0 150px; /* Fixed width for the left column */
+  font-weight: bold;
+  text-align: right;
+  padding-right: 2rem;
+  border-right: 2px solid #eee;
+}
+
+.cv-section-content {
+  padding-left: 2rem;
+  flex-grow: 1; /* Take up remaining space */
+
+  h4 {
+    font-size: 1.3em; /* Make h4 larger */
+    margin-bottom: 0.5rem;
+  }
+
+  ul, ol {
+    list-style-type: none; /* Remove default bullets/numbers */
+    padding-left: 0; /* Remove default padding */
+    margin-bottom: 1rem; /* Space after the list */
+  }
+
+  li {
+    margin-bottom: 0.5rem; /* Space between list items */
+    padding-left: 1.5rem; /* Indent list items */
+    position: relative; /* For custom bullets */
+
+    &::before {
+      content: "•"; /* Custom bullet point */
+      color: #999; /* Color of the bullet */
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  ol li::before {
+    content: counter(list-item) ".";
+  }
+}
+
+@media (max-width: 767px) {
+  .cv-section {
+    flex-direction: column; /* Stack columns vertically */
+  }
+
+  .cv-section-title {
+    flex: none; /* Remove flex properties */
+    width: 100%; /* Take full width */
+    text-align: left; /* Align text to left */
+    padding-right: 0; /* Remove right padding */
+    border-right: none; /* Remove right border */
+    padding-bottom: 1rem; /* Add space below title */
+    border-bottom: 1px solid #eee; /* Add a separator below title */
+    @include themed(background-color, #f8f8f8, #444); /* Soothing color, theme-aware */
+    padding: 1rem; /* Add padding for the background color */
+  }
+
+  .cv-section-content {
+    padding-left: 0; /* Remove left padding */
+    padding-top: 1rem; /* Add space above content */
+  }
+}

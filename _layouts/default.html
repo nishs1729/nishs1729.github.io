@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<!--
+  portfolYOU Jekyll theme by yousinix
+  Free for personal and commercial use under the MIT license
+  https://github.com/yousinix/portfolYOU
+-->
+
+<html lang="en" class="h-100">
+
+{% include head.html %}
+
+<body class="h-100 d-flex flex-column">
+
+  <main class="flex-shrink-0 flex-grow-1 container mt-5">
+    {% include navbar.html %}
+    <div class="content">
+      {{ content }}
+    </div>
+  </main>
+  {% include footer.html %}
+
+  {% include analytics.html %}
+  {% include scripts.html %}
+
+</body>
+
+</html>

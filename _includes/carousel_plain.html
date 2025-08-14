@@ -1,0 +1,10 @@
+<div class="plain-carousel-container" id="{{ include.id }}">
+  <div class="plain-carousel-track">
+    {% for item in include.carousel_data %}
+      <div class="plain-carousel-slide">
+        <img src="{{ item.image }}" alt="{{ item.caption }}">
+        <div class="plain-carousel-caption">{{ item.caption }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

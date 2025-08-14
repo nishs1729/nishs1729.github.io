@@ -1,0 +1,200 @@
+---
+layout: light_dark
+width: {{ page.width }}
+light_theme: {{ page.light_theme }}
+dark_theme: {{ page.dark_theme }}
+---
+
+<style>
+  .resources-container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+  }
+
+  .left-column {
+      flex: 0 0 180px; /* Thinner width for left column */
+      padding-right: 20px;
+      border-right: 1px solid #eee;
+  }
+
+  .right-column {
+      flex: 1; /* Takes up remaining space */
+  }
+
+  .content-section {
+      display: none; /* Hidden by default */
+      /* Animation properties */
+      animation-duration: 0.5s; /* Increased duration for smoother transition */
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-out; /* Added ease-out for natural feel */
+  }
+
+  .content-section.active {
+      display: block; /* Show active section */
+      animation-name: slideInFromRight;
+  }
+
+  .left-column ul {
+      list-style: none;
+      padding: 0;
+  }
+
+  .left-column li a {
+      display: block;
+      padding: 8px 0;
+      text-decoration: none;
+      color: #777;
+      font-weight: bold;
+      transition: color 0.2s ease-in-out;
+  }
+
+  .left-column li a:hover {
+      color: #0056b3;
+  }
+
+  .left-column li a.active {
+      color: #007bff; /* Highlight active link */
+  }
+
+  /* Keyframe animation for sliding in from right */
+  @keyframes slideInFromRight {
+      from {
+          transform: translateX(10px); /* Reduced slide distance */
+          opacity: 0;
+      }
+      to {
+          transform: translateX(0);
+          opacity: 1;
+      }
+  }
+
+  @media (max-width: 767px) {
+    .resources-container {
+      flex-direction: column; /* Stack columns vertically */
+      gap: 0; /* Remove gap between stacked columns */
+    }
+
+    .left-column {
+      flex: none; /* Remove flex properties */
+      width: 100%; /* Take full width */
+      padding-right: 0; /* Remove right padding */
+      border-right: none; /* Remove right border */
+      padding-bottom: 20px; /* Add some space below the nav */
+      border-bottom: 1px solid #eee; /* Add a separator below the nav */
+    }
+
+    .right-column {
+      flex: none; /* Remove flex properties */
+      width: 100%; /* Take full width */
+      padding-top: 20px; /* Add some space above the content */
+    }
+
+    .left-column ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center; /* Center the items if there's extra space */
+    }
+
+    .left-column li {
+      margin: 5px; /* Add some horizontal spacing between items */
+    }
+
+    .left-column li a {
+      padding: 5px 10px; /* Adjust padding for better appearance */
+      border: 1px solid #eee; /* Add a subtle border */
+      border-radius: 5px; /* Rounded corners */
+    }
+  }
+</style>
+
+<div class="markdown-body">
+  <!-- The original content from resources.md will be loaded here and then processed by JS -->
+  <div id="resources-raw-content" style="display: none;">
+    {{ content }}
+  </div>
+
+  <div class="resources-container">
+    <div class="left-column" id="left-nav">
+      <ul id="section-list"></ul>
+    </div>
+    <div class="right-column" id="right-content">
+      <!-- Content sections will be dynamically added here by JavaScript -->
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const rawContentDiv = document.getElementById('resources-raw-content');
+    const leftNav = document.getElementById('section-list');
+    const rightContent = document.getElementById('right-content');
+
+    // Create a temporary div to parse the raw HTML content from Jekyll
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = rawContentDiv.innerHTML;
+
+    let currentSectionDiv = null;
+    let sectionCounter = 0;
+
+    // Iterate through the children of the temporary div (which are the rendered elements from resources.md)
+    Array.from(tempDiv.children).forEach(element => {
+      if (element.tagName === 'H1') {
+        sectionCounter++;
+        const sectionId = 'section-' + sectionCounter;
+
+        // Create navigation link in the left column
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = element.textContent; // Use the H1 text as link text
+        link.dataset.target = sectionId; // Store the target section ID
+        listItem.appendChild(link);
+        leftNav.appendChild(listItem);
+
+        // Create a new content section div in the right column
+        currentSectionDiv = document.createElement('div');
+        currentSectionDiv.id = sectionId;
+        currentSectionDiv.classList.add('content-section');
+        rightContent.appendChild(currentSectionDiv);
+
+        // Do NOT add the H1 itself to its content section
+      } else if (currentSectionDiv) {
+        // Add other elements (paragraphs, lists, etc.) to the current content section
+        currentSectionDiv.appendChild(element.cloneNode(true));
+      }
+    });
+
+    // Add click event listener to the left navigation list
+    leftNav.addEventListener('click', function(event) {
+      event.preventDefault();
+      const targetLink = event.target.closest('a');
+      if (targetLink) {
+        const targetId = targetLink.dataset.target;
+
+        // Remove 'active' class from all links and content sections
+        document.querySelectorAll('#section-list a').forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(section => {
+          section.classList.remove('active');
+          section.style.animation = 'none'; // Reset animation
+          section.offsetHeight; // Trigger reflow
+        });
+
+        // Add 'active' class to the clicked link
+        targetLink.classList.add('active');
+
+        // Show the target content section and apply animation
+        const targetSection = document.getElementById(targetId);
+        targetSection.classList.add('active');
+        targetSection.style.animation = ''; // Re-apply animation
+      }
+    });
+
+    // Initially show the first section when the page loads
+    const firstLink = leftNav.querySelector('a');
+    if (firstLink) {
+      firstLink.classList.add('active');
+      document.getElementById(firstLink.dataset.target).classList.add('active');
+    }
+  });
+</script>

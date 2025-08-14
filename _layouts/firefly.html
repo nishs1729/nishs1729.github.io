@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<div class="firefly-container">
+  {% for i in (1..15) %}
+    <div class="firefly"></div>
+  {% endfor %}
+</div>
+
+{% if page.width == "thin" %}
+  <div class="col-lg-10 mx-auto mt-5 markdown-body">
+    {{ content }}
+  </div>
+
+{% else %}
+  <div class="markdown-body">
+    {{ content }}
+  </div>
+{% endif %}
