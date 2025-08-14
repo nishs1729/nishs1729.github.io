@@ -9,6 +9,9 @@ plugins:
   - jekyll-sass-converter
   - jekyll-gist
 
+exclude:
+  - GEMINI.md
+
 ### Author Info ###
 author:
   name              : Nishant Singh

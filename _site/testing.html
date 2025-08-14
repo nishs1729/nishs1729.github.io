@@ -21,11 +21,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Nishant Singh">
+  <meta property="og:title" content="Testing">
   <meta property="og:description" content="I study neuroscience">
   <meta property="og:image" content="assets/images/profile.jpg">
 
-  <title>Nishant Singh</title>
+  <title>Testing</title>
   <meta name="description" content="I study neuroscience">
 
   <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico">
@@ -68,6 +68,8 @@
 
       <a class="nav-item nav-link " href="/cv">CV</a>
 
+      <a class="nav-item nav-link active" href="/testing">Testing</a>
+
       
 
       <span id="theme-toggler" class="nav-item nav-link" role="button" onclick="toggleTheme()"></span>
@@ -76,10 +78,70 @@
 
 </nav>
     <div class="content">
-      <link rel="stylesheet" href="/assets/css/moths_style.css">
+      <style>
+  [data-theme="dark"] .firefly-container {
+    display: block;
+  }
+
+  [data-theme="dark"] .moths-container {
+    display: none;
+  }
+
+  [data-theme="light"] .moths-container {
+    display: block;
+  }
+
+  [data-theme="light"] .firefly-container {
+    display: none;
+  }
+</style>
+
+<link rel="stylesheet" href="/assets/css/moths_style.css">
+<link rel="stylesheet" href="/assets/css/firefly_style.css">
 
 
-<div class="moths-container" id="moths-container"></div>
+<div class="firefly-container" id="firefly-container">
+  
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+      <div class="firefly"></div>
+    
+
+  
+</div>
+
+<div class="moths-container" id="moths-container">
+  
+</div>
+
+
 
 
 <div class="col-lg-10 mx-auto mt-5 markdown-body">
@@ -192,7 +254,7 @@
 This text contains <strong>bold text</strong>, <em>italic text</em>, <strong><em>bold and italic text</em></strong>, and <del>strikethrough text</del>.
 You can also use <code class="language-plaintext highlighter-rouge">inline code</code> for short snippets.</p>
 
-<p>Here’s a paragraph with a footnote<sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup>.</p>
+<p>Here’s a paragraph with a footnote<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>.</p>
 
 <hr />
 
@@ -269,16 +331,16 @@ It can span multiple lines.</p>
     <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="nf">print</span><span class="p">(</span><span class="nf">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </code></pre></div></div>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// JavaScript example</span>
-<span class="kd">function</span> <span class="nf">greet</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`Hello, </span><span class="p">${</span><span class="nx">name</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">greet</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Hello, </span><span class="p">${</span><span class="nx">name</span><span class="p">}</span><span class="s2">!`</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="nf">greet</span><span class="p">(</span><span class="dl">"</span><span class="s2">World</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">greet</span><span class="p">(</span><span class="dl">"</span><span class="s2">World</span><span class="dl">"</span><span class="p">);</span>
 </code></pre></div></div>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># YAML example</span>
@@ -330,7 +392,7 @@ It can span multiple lines.</p>
 
 <h3 id="images">Images</h3>
 
-<p><img src="/assets/images/profile.png" alt="A placeholder image of a profile picture" title="Profile Picture" /></p>
+<p><img src="/assets/images/profile.jpg" alt="A placeholder image of a profile picture" title="Profile Picture" /></p>
 
 <hr />
 
@@ -379,7 +441,7 @@ It can span multiple lines.</p>
 <p>This concludes the elaborate test page for various markdown and visual elements.</p>
 <div class="footnotes" role="doc-endnotes">
   <ol>
-    <li id="fn:1">
+    <li id="fn:1" role="doc-endnote">
       <p>This is the content of the footnote. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
   </ol>
@@ -389,7 +451,9 @@ It can span multiple lines.</p>
 
 
 
+
 <script src="/assets/js/moths.js"></script>
+<script src="/assets/js/firefly.js"></script>
     </div>
   </main>
   

@@ -1,7 +1,7 @@
 ---
-layout: moths
-# title: Testing
-# weight: 99
+layout: light_dark
+title: Testing
+weight: 99
 permalink: /testing
 width: thin
 light_theme: moths
@@ -142,7 +142,7 @@ database:
 
 ### Images
 
-![A placeholder image of a profile picture](/assets/images/profile.png "Profile Picture")
+![A placeholder image of a profile picture](/assets/images/profile.jpg "Profile Picture")
 
 ---
 

@@ -1,5 +1,4 @@
-@use "sass:math";
-@use "sass:string";
+
 
 /*
   Malik Dellidj - @Dathink
@@ -22,17 +21,17 @@
 $year-in-second : 5; // 1 Earth year = 5 sec
 
 @function revolution($pl-year-in-days){
-  @return math.div($pl-year-in-days * $year-in-second, 365.2563) + s  //Earth reference
+  @return ($pl-year-in-days * $year-in-second) / 365.2563 + s  //Earth reference
 }
 @function alphaRandom(){
-  @return math.random(1000)*.001;
+  @return random(1000)*.001;
 }
 @function stars($s, $max-area, $color, $min-area : 0, $star-size : 0){
-  $stars : #{$min-area + math.random($max-area)}px #{$min-area + math.random($max-area)}px 0 #{$star-size}px rgba(255,255,255, alphaRandom()); 
+  $stars : #{$min-area + random($max-area)}px #{$min-area + random($max-area)}px 0 #{$star-size}px rgba(255,255,255, alphaRandom()); 
   @for $i from 1 to $s{
-    $stars: '#{$stars} , #{$min-area + math.random($max-area)}px #{$min-area + math.random($max-area)}px 0 #{$star-size}px rgba(#{$color},#{$color},#{$color}, #{alphaRandom()})'
+    $stars: '#{$stars} , #{$min-area + random($max-area)}px #{$min-area + random($max-area)}px 0 #{$star-size}px rgba(#{$color},#{$color},#{$color}, #{alphaRandom()})'
   }
-  @return string.unquote($stars);
+  @return unquote($stars);
 }
 
 $sun: 40px;
@@ -93,8 +92,8 @@ $asteroids-belt-orb : 300px; $asteroids-belt-pl: 210px;
   background:radial-gradient(ellipse at center, #ffd000 1%,#f9b700 39%,#f9b700 39%,#e06317 100%);
   height:$sun;
   width:$sun;
-  margin-top: math.div(-$sun, 2);
-  margin-left: math.div(-$sun, 2);
+  margin-top: -$sun / 2;
+  margin-left: -$sun / 2;
   background-clip: padding-box;
   border:0 !important;
   background-position: -28px -103px;
@@ -105,45 +104,45 @@ $asteroids-belt-orb : 300px; $asteroids-belt-pl: 210px;
 .mercury{
   height: $mercury-orb;
   width: $mercury-orb;
-  margin-top: math.div(-$mercury-orb, 2);
-  margin-left: math.div(-$mercury-orb, 2);
+  margin-top: -$mercury-orb / 2;
+  margin-left: -$mercury-orb / 2;
   animation: orb revolution(87.5) linear infinite;
   &:before{
     height:$mercury-pl;
     width:$mercury-pl;
     background: #9f5e26;
-    margin-top: math.div(-$mercury-pl, 2);
-    margin-left: math.div(-$mercury-pl, 2);
+    margin-top: -$mercury-pl / 2;
+    margin-left: -$mercury-pl / 2;
   }
 }
 
 .venus{
   height: $venus-orb;
   width: $venus-orb;
-  margin-top: math.div(-$venus-orb, 2);
-  margin-left: math.div(-$venus-orb, 2);
+  margin-top: -$venus-orb / 2;
+  margin-left: -$venus-orb / 2;
   animation: orb revolution(224.7) linear infinite;
   &:before{
     height:$venus-pl;
     width:$venus-pl;
     background:#BEB768;
-    margin-top: math.div(-$venus-pl, 2);
-    margin-left: math.div(-$venus-pl, 2);
+    margin-top: -$venus-pl / 2;
+    margin-left: -$venus-pl / 2;
   }
 }
 
 .earth{
   height: $earth-orb;
   width: $earth-orb;
-  margin-top: math.div(-$earth-orb, 2);
-  margin-left: math.div(-$earth-orb, 2);
+  margin-top: -$earth-orb / 2;
+  margin-left: -$earth-orb / 2;
   animation: orb revolution(365.2563) linear infinite;
   &:before{
     height:$earth-pl;
     width:$earth-pl;
     background:#11abe9;
-    margin-top: math.div(-$earth-pl, 2);
-    margin-left: math.div(-$earth-pl, 2);
+    margin-top: -$earth-pl / 2;
+    margin-left: -$earth-pl / 2;
   }
   &:after{
     position: absolute;
@@ -162,44 +161,44 @@ $asteroids-belt-orb : 300px; $asteroids-belt-pl: 210px;
 .mars{
   height: $mars-orb;
   width: $mars-orb;
-  margin-top: math.div(-$mars-orb, 2);
-  margin-left: math.div(-$mars-orb, 2);
+  margin-top: -$mars-orb / 2;
+  margin-left: -$mars-orb / 2;
   animation: orb revolution(687) linear infinite;
   &:before{
     height:$mars-pl;
     width:$mars-pl;
     background:#cf3921;
-    margin-top: math.div(-$mars-pl, 2);
-    margin-left: math.div(-$mars-pl, 2);
+    margin-top: -$mars-pl / 2;
+    margin-left: -$mars-pl / 2;
   }
 }
 
 .jupiter{
   height: $jupiter-orb;
   width: $jupiter-orb;
-  margin-top: math.div(-$jupiter-orb, 2);
-  margin-left: math.div(-$jupiter-orb, 2);
+  margin-top: -$jupiter-orb / 2;
+  margin-left: -$jupiter-orb / 2;
   animation: orb revolution(4331) linear infinite;
   &:before{
     height:$jupiter-pl;
     width:$jupiter-pl;
     background:#c76e2a;
-    margin-top: math.div(-$jupiter-pl, 2);
-    margin-left: math.div(-$jupiter-pl, 2);
+    margin-top: -$jupiter-pl / 2;
+    margin-left: -$jupiter-pl / 2;
   }
 }
 .saturn{
   height: $saturn-orb;
   width: $saturn-orb;
-  margin-top: math.div(-$saturn-orb, 2);
-  margin-left: math.div(-$saturn-orb, 2);
+  margin-top: -$saturn-orb / 2;
+  margin-left: -$saturn-orb / 2;
   animation: orb revolution(10747) linear infinite;
   &:before{
     height:$saturn-pl;
     width:$saturn-pl;
     background:#e7c194;
-    margin-top: math.div(-$saturn-pl, 2);
-    margin-left: math.div(-$saturn-pl, 2);
+    margin-top: -$saturn-pl / 2;
+    margin-left: -$saturn-pl / 2;
   }
   &:after{
     position: absolute;
@@ -222,30 +221,30 @@ $asteroids-belt-orb : 300px; $asteroids-belt-pl: 210px;
 .uranus{
   height: $uranus-orb;
   width: $uranus-orb;
-  margin-top: math.div(-$uranus-orb, 2);
-  margin-left: math.div(-$uranus-orb, 2);
+  margin-top: -$uranus-orb / 2;
+  margin-left: -$uranus-orb / 2;
   animation: orb revolution(30589) linear infinite;
   &:before{
     height:$uranus-pl;
     width:$uranus-pl;
     background:#b5e3e3;
-    margin-top: math.div(-$uranus-pl, 2);
-    margin-left: math.div(-$uranus-pl, 2);
+    margin-top: -$uranus-pl / 2;
+    margin-left: -$uranus-pl / 2;
   }
 }
 
 .neptune{
   height: $neptune-orb;
   width: $neptune-orb;
-  margin-top: math.div(-$neptune-orb, 2);
-  margin-left: math.div(-$neptune-orb, 2);
+  margin-top: -$neptune-orb / 2;
+  margin-left: -$neptune-orb / 2;
   animation: orb revolution(59802) linear infinite;
   &:before{
     height:$neptune-pl;
     width:$neptune-pl;
     background:#175e9e;
-    margin-top: math.div(-$neptune-pl, 2);
-    margin-left: math.div(-$neptune-pl, 2);
+    margin-top: -$neptune-pl / 2;
+    margin-left: -$neptune-pl / 2;
   }
 }
 
@@ -254,34 +253,34 @@ $asteroids-belt-orb : 300px; $asteroids-belt-pl: 210px;
   border-color: transparent !important;
   height: $asteroids-belt-orb;
   width: $asteroids-belt-orb;
-  margin-top: math.div(-$asteroids-belt-orb, 2);
-  margin-left: math.div(-$asteroids-belt-orb, 2);
+  margin-top: -$asteroids-belt-orb / 2;
+  margin-left: -$asteroids-belt-orb / 2;
   animation: orb revolution(2191) linear infinite;
   overflow:hidden;
   &:before{
     top:50%;
     height:$asteroids-belt-pl;
     width:$asteroids-belt-pl;
-    margin-left: math.div(-$asteroids-belt-pl, 2);
-    margin-top: math.div(-$asteroids-belt-pl, 2);
+    margin-left: -$asteroids-belt-pl / 2;
+    margin-top: -$asteroids-belt-pl / 2;
     background: transparent;
     border-radius:140px !important;
-    @include themed(box-shadow, stars(700, 290, 0, math.div(-290, 2), -104), stars(700, 290, 255, math.div(-290, 2), -104));
+    @include themed(box-shadow, stars(700, 290, 0, -290 / 2, -104), stars(700, 290, 255, -290 / 2, -104));
   }
 }
 
 .pluto{
   height: $pluto-orb;
   width: $pluto-orb;
-  margin-top: math.div(-$pluto-orb, 2) + -60;
-  margin-left: math.div(-$pluto-orb, 2) + 70;
+  margin-top: -$pluto-orb / 2 + -60;
+  margin-left: -$pluto-orb / 2 + 70;
   animation: orb revolution(90580) linear infinite;
   &:before{
     height:$pluto-pl;
     width:$pluto-pl;
     background:#fff;
-    margin-top: math.div(-$pluto-pl, 2);
-    margin-left: math.div(-$pluto-pl, 2);
+    margin-top: -$pluto-pl / 2;
+    margin-left: -$pluto-pl / 2;
   }
 }
 

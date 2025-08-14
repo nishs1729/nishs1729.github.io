@@ -23,9 +23,14 @@ const mothImages = [
   
     
   
+    
+  
 ];
 
 function createMoth() {
+  if (mothImages.length === 0) {
+    return;
+  }
   const moth = document.createElement('img');
   moth.src = mothImages[Math.floor(Math.random() * mothImages.length)];
   moth.classList.add('moth');
