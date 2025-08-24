@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ '/assets/css/stars_style.css' | relative_url }}">
+
+<div class="stars-container"></div>
+
+{% if page.width == "thin" %}
+  <div class="col-lg-10 mx-auto mt-5 markdown-body">
+    {{ content }}
+  </div>
+
+{% else %}
+  <div class="markdown-body">
+    {{ content }}
+  </div>
+{% endif %}
+
+<script src="{{ '/assets/js/stars.js' | relative_url }}"></script>

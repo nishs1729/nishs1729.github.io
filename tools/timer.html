@@ -1,0 +1,49 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interval Timer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/timer.css">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ '/assets/favicon.png' | relative_url }}">
+</head>
+<body>
+
+  {% include tools_header.html %}
+
+  <div class="container">
+  <h1>Exercise Interval Timer</h1>
+
+  <div>
+    <input type="text" id="activityName" placeholder="Activity">
+    <input type="number" id="activityWork" placeholder="Work (s)" min="1">
+    <input type="number" id="activityRest" placeholder="Rest (s)" min="0" value="0">
+    <input type="number" id="activityReps" placeholder="Reps" min="1" value="1">
+    <button onclick="addActivity()">Add</button>
+  </div>
+
+  <div id="activities"></div>
+
+  <button onclick="startWorkout()">Start Workout</button>
+  <button onclick="savePreset()">💾 Save Preset</button>
+  <input type="file" id="loadInput" style="display:none;" accept=".json">
+  <button onclick="document.getElementById('loadInput').click()">📂 Load Preset</button>
+
+  <div id="current"></div>
+  <div id="timer"></div>
+  <div id="progressBar"><div id="progressFill"></div></div>
+
+  <div id="workoutControls" style="display:none;">
+    <button id="pauseResumeBtn" onclick="togglePause()">⏸ Pause</button>
+    <button onclick="skipWorkout()">⏭ Skip</button>
+    <button onclick="endWorkout()">⏹ End</button>
+  </div>
+  </div>
+
+  <script src="js/timer.js"></script>
+</body>
+</html>

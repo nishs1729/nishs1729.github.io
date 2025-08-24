@@ -1,0 +1,84 @@
+---
+layout: default
+---
+
+<style>
+  [data-theme="dark"] .{{ page.dark_theme }}-container {
+    display: block;
+  }
+
+  [data-theme="dark"] .{{ page.light_theme }}-container {
+    display: none;
+  }
+
+  [data-theme="light"] .{{ page.light_theme }}-container {
+    display: block;
+  }
+
+  [data-theme="light"] .{{ page.dark_theme }}-container {
+    display: none;
+  }
+</style>
+
+<link rel="stylesheet" href="{{ '/assets/css/' | append: page.light_theme | append: '_style.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/' | append: page.dark_theme | append: '_style.css' | relative_url }}">
+
+
+<div class="{{ page.dark_theme }}-container" id="{{ page.dark_theme }}-container">
+  {% if page.dark_theme == "firefly" %}
+    {% for i in (1..15) %}
+      <div class="firefly"></div>
+    {% endfor %}
+
+  {% elsif page.dark_theme == "solar_system" %}
+    <div class="sun"></div>
+    <div class="mercury"></div>
+    <div class="venus"></div>
+    <div class="earth"></div>
+    <div class="mars"></div>
+    <div class="jupiter"></div>
+    <div class="saturn"></div>
+    <div class="uranus"></div>
+    <div class="neptune"></div>
+    <div class="pluto"></div>
+    <div class="asteroids-belt"></div>
+  {% endif %}
+</div>
+
+<div class="{{ page.light_theme }}-container" id="{{ page.light_theme }}-container">
+  {% if page.light_theme == "firefly" %}
+    {% for i in (1..15) %}
+      <div class="firefly"></div>
+    {% endfor %}
+
+  {% elsif page.light_theme == "solar_system" %}
+    <div class="sun"></div>
+    <div class="mercury"></div>
+    <div class="venus"></div>
+    <div class="earth"></div>
+    <div class="mars"></div>
+    <div class="jupiter"></div>
+    <div class="saturn"></div>
+    <div class="uranus"></div>
+    <div class="neptune"></div>
+    <div class="pluto"></div>
+    <div class="asteroids-belt"></div>
+  {% endif %}
+</div>
+
+
+
+{% if page.width == "thin" %}
+<div class="col-lg-10 mx-auto mt-5 markdown-body">
+  {{ content }}
+</div>
+
+{% else %}
+<div class="markdown-body">
+  {{ content }}
+</div>
+{% endif %}
+
+
+<script src="{{ '/assets/js/' | append: page.light_theme | append: '.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/' | append: page.dark_theme | append: '.js' | relative_url }}"></script>

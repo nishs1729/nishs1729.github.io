@@ -1,0 +1,142 @@
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding-top: 60px; /* Add padding to body to avoid content being hidden by header */
+  }
+
+  .header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 0 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+  }
+
+  .header a {
+    text-decoration: none;
+    color: #1877f2;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  /* Side Panel */
+  .side-panel {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1001;
+    top: 60px; /* Position below the header */
+    right: 0;
+    background-color: #fff;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 20px; /* Adjust padding */
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  }
+
+  .side-panel a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .side-panel a:hover {
+    color: #1877f2;
+  }
+
+  .open-btn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #1877f2;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+
+  .open-btn.active {
+    background-color: #166fe5;
+  }
+
+  #theme-toggler {
+    cursor: pointer;
+  }
+
+  #theme-toggler:before {
+    content: "🌙";
+  }
+
+  [data-theme="dark"] #theme-toggler:before {
+    content: "🌞";
+  }
+
+  [data-theme="dark"] body {
+      background-color: #121212;
+      color: #fff;
+  }
+
+  [data-theme="dark"] .header, [data-theme="dark"] .side-panel, [data-theme="dark"] a:hover {
+      background-color: #1e1e1e;
+  }
+
+  [data-theme="dark"] a {
+      border-color: #333;
+  }
+</style>
+
+<div class="header">
+  <a href="/">Home</a>
+  <div>
+    <span id="theme-toggler" class="nav-item nav-link" role="button" onclick="toggleTheme()"></span>
+    <button class="open-btn" id="open-btn">&#9776; Tools</button>
+  </div>
+</div>
+
+<div id="side-panel" class="side-panel">
+  {% for tool in site.data.tools %}
+      <a href="{{ tool.url | relative_url }}">{{ tool.name }}</a>
+    {% endfor %}
+</div>
+
+<script src="/assets/js/theme.js"></script>
+<script>
+  const panel = document.getElementById("side-panel");
+  const openBtn = document.getElementById("open-btn");
+
+  function togglePanel() {
+    if (panel.style.width === "250px") {
+      panel.style.width = "0";
+      openBtn.classList.remove("active");
+    } else {
+      panel.style.width = "250px";
+      openBtn.classList.add("active");
+    }
+  }
+
+  openBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    togglePanel();
+  });
+
+  document.addEventListener('click', function(event) {
+    const isClickInsidePanel = panel.contains(event.target);
+    const isClickOnOpenBtn = openBtn.contains(event.target);
+
+    if (!isClickInsidePanel && !isClickOnOpenBtn && panel.style.width === "250px") {
+      panel.style.width = "0";
+      openBtn.classList.remove("active");
+    }
+  });
+</script>

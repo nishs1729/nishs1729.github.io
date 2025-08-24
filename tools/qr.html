@@ -1,0 +1,147 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QR</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/qr.css">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ '/assets/favicon.png' | relative_url }}">
+  <!-- QR generation and decoding libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+</head>
+<body>
+
+{% include tools_header.html %}
+
+<div class="container">
+<div class="grid">
+  <!-- Generator Card -->
+  <section class="card" id="generator">
+    <h2>Generate QR</h2>
+    <div class="row">
+      <textarea id="qrText" placeholder="Text / URL / JSON"></textarea>
+    </div>
+    <div class="row">
+      <div>
+        <input type="text" id="qrTitle" placeholder="Optional title for QR" />
+      </div>
+    </div>
+    <div class="row cols-3">
+      <div>
+        <label for="qrSize">Size (px)</label>
+        <input type="number" id="qrSize" min="120" max="1024" value="320" />
+      </div>
+      <div>
+        <label for="qrMargin">Margin</label>
+        <input type="number" id="qrMargin" min="0" max="16" value="2" />
+      </div>
+      <div>
+        <label for="qrLevel">Error Level</label>
+        <select id="qrLevel">
+          <option value="L">L (7%)</option>
+          <option value="M" selected>M (15%)</option>
+          <option value="Q">Q (25%)</option>
+          <option value="H">H (30%)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row cols-2">
+      <div>
+        <label for="qrFg">Foreground</label>
+        <input type="color" id="qrFg" value="#000000" />
+      </div>
+      <div>
+        <label for="qrBg">Background</label>
+        <input type="color" id="qrBg" value="#ffffff" />
+      </div>
+    </div>
+    <div class="row cols-2">
+      <div>
+        <input type="checkbox" id="embedImage" />
+        <label for="qrImageInput">Embed Image</label>
+        <input type="file" id="qrImageInput" accept="image/*" />
+      </div>
+      <div>
+        <input type="checkbox" id="enableBgImage" />
+        <label for="qrBgImageInput">Background Image</label>
+        <input type="file" id="qrBgImageInput" accept="image/*" />
+      </div>
+    </div>
+    <div class="row cols-2">
+      <div>
+        <label for="qrLogoScale">Logo Scale (0-1)</label>
+        - [<span id="qrLogoScaleValue">0.2</span>]
+        <input type="range" id="qrLogoScale" min="0.1" max="1.0" step="0.05" value="0.2" class="slider" />
+      </div>
+      <div>
+        <label for="dotScale">Dot Scale (0-1)</label>
+        - [<span id="dotScaleValue">0.5</span>]
+        <input type="range" id="dotScale" min="0.3" max="1.0" step="0.05" value="0.5" class="slider" />
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="qrLogoBgTransparent">Transparent Logo Bg</label>
+        <input type="checkbox" id="qrLogoBgTransparent" checked />
+      </div>
+    </div>
+    <div class="flex qr-generate-buttons-margin">
+      <button class="btn" id="btnGenerate">Generate</button>
+      <button class="btn secondary" id="btnClearGen">Clear</button>
+      <span class="pill">Tip: higher error makes robust codes.</span>
+    </div>
+    <div class="qr-box" id="qrPreview" aria-live="polite"></div>
+    <div class="flex qr-download-buttons-margin">
+      <button class="btn" id="btnDownloadPNG" disabled>Download PNG</button>
+      <button class="btn" id="btnDownloadSVG" disabled>Download SVG</button>
+    </div>
+  </section>
+
+  <!-- Scanner Card -->
+  <section class="card" id="scanner">
+    <h2>Scan QR</h2>
+    <label for="cameraSelect">Camera</label>
+    <div class="row cols-2">
+      <div>
+        <select id="cameraSelect"></select>
+      </div>
+      <div>
+        <div class="flex">
+          <button class="btn" id="btnStart">Start Camera</button>
+          <button class="btn secondary" id="btnStop" disabled>Stop</button>
+        </div>
+      </div>
+    </div>
+    <div class="video-wrap">
+      <div class="badge" id="statusBadge">Idle</div>
+      <video id="video" playsinline muted></video>
+    </div>
+    <div class="flex" style="margin-top:10px;">
+      <input type="file" id="fileInput" accept="image/*" />
+      <button class="btn secondary" id="btnTorch" disabled>Toggle Torch</button>
+      <span class="muted">or upload an image</span>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <label>Result</label>
+      <div class="result" id="scanResult">
+        <pre id="resultText">—</pre>
+      </div>
+      <div class="flex">
+        <button class="btn" id="btnCopy" disabled>Copy</button>
+        <a class="btn secondary" id="btnOpen" href="#" target="_blank" rel="noopener">Open Link</a>
+        <span class="hint">URLs show an "Open Link" button.</span>
+      </div>
+    </div>
+    <canvas id="hiddenCanvas"></canvas>
+  </section>
+</div>
+</div>
+
+<script src="js/qrcode.js"></script>
+<script src="js/qr.js"></script>
+</body>
+</html>

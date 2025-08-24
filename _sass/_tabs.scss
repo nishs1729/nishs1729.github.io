@@ -1,0 +1,102 @@
+.tab-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.tab-left-col {
+    flex: 0 0 180px; /* Thinner width for left column */
+    padding-right: 20px;
+    @include themed(border-right, 2px solid $border-light, 2px solid $border-dark);
+}
+
+.tab-right-col {
+    flex: 1; /* Takes up remaining space */
+    transition: height 0.5s ease-in-out;
+    overflow: hidden;
+}
+
+.tab-section {
+    display: none; /* Hidden by default */
+    /* Animation properties */
+    animation-duration: 0.5s; /* Increased duration for smoother transition */
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out; /* Added ease-out for natural feel */
+}
+
+.tab-section.active {
+    display: block; /* Show active section */
+    animation-name: slideInFromRight;
+}
+
+.tab-left-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tab-left-col li a {
+    display: block;
+    padding: 8px 0;
+    text-decoration: none;
+    color: #777;
+    font-weight: bold;
+    transition: color 0.2s ease-in-out;
+}
+
+.tab-left-col li a:hover {
+    color: #0056b3;
+}
+
+.tab-left-col li a.active {
+    color: #007bff; /* Highlight active link */
+}
+
+/* Keyframe animation for sliding in from right */
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(10px); /* Reduced slide distance */
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 767px) {
+  .tab-container {
+    flex-direction: column; /* Stack columns vertically */
+    gap: 0; /* Remove gap between stacked columns */
+  }
+
+  .tab-left-col {
+    flex: none; /* Remove flex properties */
+    width: 100%; /* Take full width */
+    padding-right: 0; /* Remove right padding */
+    border-right: none; /* Remove right border */
+    padding-bottom: 20px; /* Add some space below the nav */
+    @include themed(border-bottom, 2px solid $border-light, 2px solid $border-dark); /* Add a separator below the nav */
+  }
+
+  .tab-right-col {
+    flex: none; /* Remove flex properties */
+    width: 100%; /* Take full width */
+    padding-top: 20px; /* Add some space above the content */
+  }
+
+  .tab-left-col ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center the items if there's extra space */
+  }
+
+  .tab-left-col li {
+    margin: 5px; /* Add some horizontal spacing between items */
+  }
+
+  .tab-left-col li a {
+    padding: 5px 10px; /* Adjust padding for better appearance */
+    border: 1px solid #eee; /* Add a subtle border */
+    border-radius: 5px; /* Rounded corners */
+  }
+}

@@ -1,0 +1,12 @@
+<div class="carousel-wrapper">
+  <div class="carousel" id="{{ include.id }}">
+    <div class="carousel__inner">
+      {% for item in include.carousel_data %}
+        <div class="carousel__item">
+          <img src="{{ item.image }}" alt="{{ item.caption }}">
+          <div class="carousel__caption">{{ item.caption }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+title: Nishant Singh
+repository          : nishs1729/nishs1729.github.io
+open_new_tab        : true                    # Opens external URLs in new tab (works for posts, projects and navbar only)
+
+plugins:
+  - jemoji
+  - jekyll-sass-converter
+  - jekyll-gist
+
+exclude:
+  - GEMINI.md
+
+### Author Info ###
+author:
+  name              : Nishant Singh
+  image             : assets/images/profile.jpg
+# email             : username@domain.com
+# facebook          : your_username
+  github            : nishs1729
+# instagram         : your_username
+  linkedin          : nishs1729
+# twitter           : your_username
+# youtube           : your_channel_name
+
+### Analytics ###
+analytics:
+  enabled: false                                        # Set true to enable analytics
+  google:
+    tracking_id: your-google-tracking-id

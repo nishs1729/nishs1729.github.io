@@ -1,0 +1,62 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pomodoro</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/pomodoro.css">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ '/assets/favicon.png' | relative_url }}">
+</head>
+<body>
+
+  {% include tools_header.html %}
+
+  <div class="wrap">
+    <div class="card" role="application" aria-label="Pomodoro timer">
+      <h1>Pomodoro Timer</h1>
+      <div class="sub">Default 25 minutes — change the length and press Start. Keeps accurate time even when the tab is inactive.</div>
+
+      <div class="display" id="display">25:00</div>
+
+      <div class="small">
+        <label>
+          Duration (minutes)
+          <input id="minutesInput" type="number" min="1" max="180" step="1" value="25" aria-label="minutes input" />
+        </label>
+        <label>
+          Auto-restart
+          <input id="autorestart" type="checkbox" aria-label="auto restart" />
+        </label>
+      </div>
+
+      <div class="controls">
+        <button id="startBtn" class="positive">Start</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="resetBtn" class="warn">Reset</button>
+      </div>
+
+      <div class="row">
+        <button id="shortBtn">Short (5)</button>
+        <button id="longBtn">Long (15)</button>
+        <button id="setNowBtn">Set to current time</button>
+      </div>
+
+      <div class="hint">When timer finishes it will vibrate (mobile) and show a notification if you allow it. It uses absolute timestamps so it remains correct when the browser tab is backgrounded or the device screen is turned off (unless the OS kills the browser process).</div>
+
+      <footer>
+        <div class="tiny">Saved locally. Works offline in the same tab. Uses notifications and vibration when available.</div>
+      </footer>
+    </div>
+  </div>
+
+  <audio id="bellSound" preload="auto">
+    <source src="data:audio/mp3;base64,SUQzAwAAAAAAFgAAABkAAAABAAACAAACAAACAAACAAACAAAC" type="audio/mpeg">
+  </audio>
+
+  <script src="js/pomodoro.js"></script>
+</body>
+</html>

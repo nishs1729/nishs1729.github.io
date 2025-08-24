@@ -1,0 +1,161 @@
+:root {
+  --button-primary-bg: #2196F3;
+  --button-primary-text: white;
+  --button-disabled-bg: #aaa;
+  --activity-bg: white;
+  --activity-border: #ddd;
+  --controls-button-bg: #eee;
+  --controls-button-text: black;
+  --progress-bar-bg: #ddd;
+  --progress-fill-bg: #4CAF50;
+}
+
+[data-theme="dark"] {
+  --button-primary-bg: #0d47a1; /* Darker blue */
+  --button-primary-text: white;
+  --button-disabled-bg: #555;
+  --activity-bg: #1e1e1e;
+  --activity-border: #333;
+  --controls-button-bg: #333;
+  --controls-button-text: #fff;
+  --progress-bar-bg: #555;
+  --progress-fill-bg: #2e7d32; /* Darker green */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  margin: 10px 0;
+  font-size: 1.2em; /* Smaller for mobile */
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 1.5em; /* Revert to original */
+  }
+}
+
+input,
+button {
+  padding: 0.6rem 1rem; /* Slightly smaller padding */
+  margin: 0.2rem; /* Reduced margin */
+  font-size: 0.9em; /* Slightly smaller font */
+}
+
+@media (min-width: 600px) { /* For larger phones/tablets */
+  input,
+  button {
+    padding: 10px;
+    margin: 5px;
+    font-size: 1em;
+  }
+}
+
+input {
+  width: 45%; /* Make inputs take more width on mobile */
+  max-width: 150px; /* Allow them to grow a bit */
+  border: 1px solid var(--activity-border);
+}
+
+@media (min-width: 600px) {
+  input {
+    width: 22%;
+    max-width: 100px;
+  }
+}
+
+button {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+}
+
+button:disabled {
+  background: var(--button-disabled-bg);
+}
+
+#activities {
+  margin-top: 15px;
+  max-width: 90%; /* Allow activities to take more width on mobile */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 600px) {
+  #activities {
+    max-width: 500px; /* Revert to original */
+  }
+}
+
+.activity {
+  padding: 8px;
+  border: 1px solid var(--activity-border);
+  margin: 5px;
+  border-radius: 8px;
+  background: var(--activity-bg);
+  display: flex;
+  flex-direction: column; /* Stack items vertically on mobile */
+  align-items: flex-start; /* Align items to the start */
+  gap: 5px; /* Small gap between stacked items */
+  flex-wrap: wrap;
+}
+
+@media (min-width: 600px) {
+  .activity {
+    flex-direction: row; /* Revert to horizontal */
+    align-items: center;
+    gap: unset; /* Remove gap */
+  }
+}
+
+.controls button {
+  margin-left: 5px;
+  background: var(--controls-button-bg);
+  color: var(--controls-button-text);
+}
+
+#current {
+  font-size: 1.2em;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+#timer {
+  font-size: 2em; /* Slightly smaller for mobile */
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+@media (min-width: 600px) {
+  #timer {
+    font-size: 2.5em; /* Revert to original */
+  }
+}
+
+#progressBar {
+  height: 20px;
+  width: 90%;
+  margin: 15px auto;
+  border-radius: 10px;
+  background: var(--progress-bar-bg);
+  overflow: hidden;
+}
+
+#progressFill {
+  height: 100%;
+  width: 0;
+  background: var(--progress-fill-bg);
+  transition: width 1s linear;
+}
+
+#workoutControls {
+  margin-top: 20px;
+}
+
+#workoutControls button {
+  margin: 5px;
+  padding: 12px 20px;
+}

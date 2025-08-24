@@ -1,0 +1,103 @@
+.cv-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin-top: 60px;
+}
+
+.cv-section {
+  margin-bottom: 1.2rem;
+  padding-top: 1rem;
+  @include themed(border-top, 2px solid #eee, 2px solid $dark-300);
+  display: flex;
+}
+
+.cv-section:last-child {
+  border-bottom: none;
+}
+
+.cv-section-title {
+  flex: 0 0 150px; /* Fixed width for the left column */
+  font-weight: bold;
+  text-align: right;
+  padding-right: 1rem;
+  @include themed(border-right, 2px solid #eee, 2px solid $dark-300);
+  color: $primary
+}
+
+.cv-section-content {
+  padding-left: 2rem;
+  flex-grow: 1; /* Take up remaining space */
+
+  h4 {
+    font-weight: bold;
+    font-size: 1.1em; /* Make h4 larger */
+    margin-bottom: 0.5rem;
+  }
+  
+  h5 {
+    font-weight: bold;
+    font-size: 1.1em; /* Make h4 larger */
+    margin-bottom: 0.5rem;
+    padding-top: 1.2em;
+    @include themed(border-top, 2px solid #eee, 2px solid $dark-300);
+  }
+  
+  h5:first-child {
+    padding-top: 0;
+    border: none;
+  }
+
+  ul, ol {
+    list-style-type: none; /* Remove default bullets/numbers */
+    padding-left: 0; /* Remove default padding */
+    margin-bottom: 1rem; /* Space after the list */
+  }
+
+  li {
+    margin-bottom: 0.5rem; /* Space between list items */
+    padding-left: 1.5rem; /* Indent list items */
+    position: relative; /* For custom bullets */
+
+    &::before {
+      content: "-"; /* Custom bullet point */
+      @include themed(color, #999, rgba(white, 0.4));
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  ol li::before {
+    content: counter(list-item) ".";
+  }
+}
+
+@media (max-width: 767px) {
+  .cv-section {
+    flex-direction: column; /* Stack columns vertically */
+    @include themed(border-top, none, none);
+  }
+
+  .cv-section-title {
+    flex: none; /* Remove flex properties */
+    width: 100%; /* Take full width */
+    text-align: left; /* Align text to left */
+    @include themed(border-right, none, none);
+    // border-bottom: 1px solid #999; /* Add a separator below title */
+    @include themed(background-color, #f8f8f8, #333); /* Soothing color, theme-aware */
+    padding: 1rem; /* Add padding for the background color */
+  }
+
+  .cv-section-content {
+    padding-left: 0; /* Remove left padding */
+    padding-top: 1rem; /* Add space above content */
+
+    h5 {
+      padding-top: 1em;
+      @include themed(border, none, none);
+    }
+
+    h5:first-child {
+      padding-top: 0;
+    }
+  }
+}

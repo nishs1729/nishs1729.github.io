@@ -1,0 +1,34 @@
+.rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.rain {
+  position: fixed;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  border-width: 2px;
+  border-style: solid;
+  @include themed(border-color, $dark, $light);
+  transform: translate(-50%, -50%);
+  animation: ripple 3s ease-out;
+}
+
+@keyframes ripple {
+  from {
+    width: 0;
+    height: 0;
+    opacity: 0.1;
+  }
+  to {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,28 @@
+.social {
+  text-decoration: none !important;
+}
+
+#attribution {
+  opacity: 0.5;
+  a {
+    text-decoration: none;
+    font-weight: bold;
+  }
+}
+
+.main-footer {
+  position: relative; /* Needed for absolute positioning of waves */
+  // min-height: 235px; /* Increased minimum height for waves */
+  // padding-bottom: 150px; /* Keep padding for content above waves */
+  // overflow: hidden; /* Hide any overflow from waves */
+}
+
+@media only screen and (min-width: 768px) {
+  #attribution {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    position: relative;
+    bottom: 120px;
+    right: 22px;
+  }
+}

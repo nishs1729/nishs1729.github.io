@@ -1,0 +1,12 @@
+- name: Noisee
+  url: /tools/noisee.html
+- name: Pomodoro
+  url: /tools/pomodoro.html
+- name: QR Code Generator
+  url: /tools/qr.html
+- name: Scribble
+  url: /tools/scribble.html
+- name: Timer
+  url: /tools/timer.html
+- name: Timezone Converter
+  url: /tools/timezone.html
