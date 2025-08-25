@@ -109,6 +109,7 @@ async function loadImage(src) {
             output.value = text || 'No text detected.';
             status.textContent = 'Done processing.';
             status.classList.remove('progress');
+            adjustOutputHeight();
         } catch (err) {
             status.textContent = 'Error during OCR: ' + err.message;
             status.classList.add('error');
@@ -120,3 +121,14 @@ async function loadImage(src) {
     };
     currentImage.src = src;
 }
+
+function adjustOutputHeight() {
+    output.style.height = 'auto';
+    output.style.height = (output.scrollHeight) + 'px';
+}
+
+// Adjust height on input
+output.addEventListener('input', adjustOutputHeight);
+
+// Initial adjustment
+adjustOutputHeight();

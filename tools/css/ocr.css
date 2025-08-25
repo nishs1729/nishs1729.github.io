@@ -130,13 +130,12 @@ h3 {
 
 #output {
     width: 100%;
-    height: 192px;
     padding: 12px;
     border: 1px solid var(--card-border-color);
     border-radius: 8px;
     background-color: var(--bg-color);
     color: var(--text-color);
-    resize: none;
+    resize: both;
 }
 
 @media (max-width: 640px) {
