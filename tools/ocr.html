@@ -1,0 +1,38 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to Text OCR</title>
+    <script src="js/tesseract.min.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/ocr.css">
+</head>
+<body>
+    {% include tools_header.html %}
+
+    <div class="container">
+        <div class="card">
+            <h1>Image to Text OCR</h1>
+            <div id="dropZone">
+                <p>Drag & Drop an image here, click to upload, or press <kbd>Ctrl+V</kbd> to paste from clipboard</p>
+                <label>
+                    <input type="file" id="imageUpload" accept="image/*">
+                    <span class="upload-button">Upload Image</span>
+                </label>
+            </div>
+            <p id="status"></p>
+            <img id="preview" alt="Image Preview">
+        </div>
+        <div class="card">
+            <h3>Extracted Text:</h3>
+            <textarea id="output" readonly></textarea>
+        </div>
+    </div>
+    <canvas style="display:none;"></canvas>
+    <script src="js/ocr.js"></script>
+</body>
+</html>

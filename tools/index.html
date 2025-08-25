@@ -17,24 +17,11 @@ layout: none
 
   <div class="container">
     <div class="tools-grid">
-      <a href="/tools/noisee.html" class="tool-card">
-        <h3>Noisee</h3>
-      </a>
-      <a href="/tools/pomodoro.html" class="tool-card">
-        <h3>Pomodoro</h3>
-      </a>
-      <a href="/tools/qr.html" class="tool-card">
-        <h3>QR Code Generator</h3>
-      </a>
-      <a href="/tools/scribble.html" class="tool-card">
-        <h3>Scribble</h3>
-      </a>
-      <a href="/tools/timer.html" class="tool-card">
-        <h3>Timer</h3>
-      </a>
-      <a href="/tools/timezone.html" class="tool-card">
-        <h3>Timezone Converter</h3>
-      </a>
+      {% for tool in site.data.tools %}
+        <a href="{{ tool.url | relative_url }}" class="tool-card">
+          <h3>{{ tool.name }}</h3>
+        </a>
+      {% endfor %}
     </div>
   </div>
 

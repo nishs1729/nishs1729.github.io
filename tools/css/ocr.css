@@ -1,0 +1,152 @@
+:root {
+    --bg-color: #f3f4f6;
+    --text-color: #1f2937;
+    --card-bg-color: #ffffff;
+    --card-border-color: #d1d5db;
+    --button-bg-color: #3b82f6;
+    --button-text-color: #ffffff;
+    --button-hover-bg-color: #2563eb;
+    --kbd-bg-color: #e5e7eb;
+    --error-color: #ef4444;
+    --progress-color: #3b82f6;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --card-bg-color: #1e1e1e;
+    --card-border-color: #333;
+    --button-bg-color: #1e88e5;
+    --button-text-color: #ffffff;
+    --button-hover-bg-color: #1565c0;
+    --kbd-bg-color: #4b5563;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#dropZone {
+    border: 4px dashed var(--card-border-color);
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+#dropZone.dragover {
+    border-color: var(--button-bg-color);
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+#dropZone p {
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+#dropZone kbd {
+    background-color: var(--kbd-bg-color);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#dropZone label {
+    display: inline-block;
+}
+
+#dropZone input[type="file"] {
+    display: none;
+}
+
+#dropZone .upload-button {
+    display: inline-block;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#dropZone .upload-button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+#status {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+#status.error {
+    color: var(--error-color);
+}
+
+#status.progress {
+    color: var(--progress-color);
+}
+
+#preview {
+    max-width: 100%;
+    border: 1px solid var(--card-border-color);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#output {
+    width: 100%;
+    height: 192px;
+    padding: 12px;
+    border: 1px solid var(--card-border-color);
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    resize: none;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 16px;
+    }
+    .card {
+        padding: 16px;
+    }
+    #dropZone {
+        padding: 16px;
+    }
+}
