@@ -40,6 +40,8 @@ const soundsDef = [
    src:"assets/sounds/bonfire.mp3"},
   {id:"birds", icon:"🦜", name:"Birds",
    src:"assets/sounds/birds.mp3"},
+  {id:"night-birds", icon:"🦉", name:"Night birds",
+   src:"assets/sounds/owl.mp3"},
   {id:"cicada", icon:"🦗", name:"Cicada",
    src:"assets/sounds/cicada.mp3"},
   {id:"sea", icon:"🌊", name:"Sea",

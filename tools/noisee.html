@@ -72,6 +72,14 @@
           <input type="range" min="0" max="1" step="0.01" value="0.6" class="slider" id="vol-birds">
         </div>
       </div>
+      <div class="sound-card" draggable="true" data-id="night-birds">
+        <div class="icon">🦉</div>
+        <div class="controls">
+          <div class="name">Night birds</div>
+          <button class="btn" id="play-night-birds">▶</button>
+          <input type="range" min="0" max="1" step="0.01" value="0.6" class="slider" id="vol-night-birds">
+        </div>
+      </div>
       <div class="sound-card" draggable="true" data-id="cicada">
         <div class="icon">🦗</div>
         <div class="controls">
@@ -101,7 +109,8 @@ const builtInPresets={
     fire: 0.7,
     birds: 0,
     cicada: 0.5,
-    sea: 0
+    sea: 0,
+    "night-birds": 0.4
   },
   "Gentle Rain": {
     rain: 0.6,
@@ -110,7 +119,8 @@ const builtInPresets={
     fire: 0,
     birds: 0,
     cicada: 0,
-    sea: 0
+    sea: 0,
+    "night-birds": 0
   },
   "Rainy Night": {
     rain:0.8,
@@ -119,7 +129,8 @@ const builtInPresets={
     fire:0,
     birds:0,
     cicada:0.3,
-    sea:0
+    sea:0,
+    "night-birds": 0
   },
   "Tropical Beach": {
     rain: 0,
@@ -128,7 +139,8 @@ const builtInPresets={
     fire: 0,
     birds: 1,
     cicada: 0,
-    sea: 0.8
+    sea: 0.8,
+    "night-birds": 0
   },
   "Thunderstorm": {
     rain: 0.9,
@@ -137,7 +149,8 @@ const builtInPresets={
     fire: 0,
     birds: 0,
     cicada: 0,
-    sea: 0
+    sea: 0,
+    "night-birds": 0
   },
   "Summer Night": {
     rain: 0,
@@ -146,7 +159,8 @@ const builtInPresets={
     fire: 0.5,
     birds: 0,
     cicada: 1,
-    sea: 0
+    sea: 0,
+    "night-birds": 0.7
   },
   "Forest Campfire": {
     rain:0,
@@ -155,7 +169,8 @@ const builtInPresets={
     fire:1,
     birds:0.7,
     cicada:1,
-    sea:0
+    sea:0,
+    "night-birds": 0.4
   },
   "Windy River": {
     rain:0,
@@ -164,7 +179,8 @@ const builtInPresets={
     fire:0,
     birds:0,
     cicada:0,
-    sea:0
+    sea:0,
+    "night-birds": 0
   },
   "Beach Day": {
     rain:0,
@@ -173,7 +189,8 @@ const builtInPresets={
     fire:0,
     birds:0.6,
     cicada:0,
-    sea:0.8
+    sea:0.8,
+    "night-birds": 0
   },
   "Night Swamp": {
     rain:0,
@@ -182,7 +199,8 @@ const builtInPresets={
     fire:0,
     birds:0,
     cicada:0.9,
-    sea:0.2
+    sea:0.2,
+    "night-birds": 0.7
   }
 };
 </script>
