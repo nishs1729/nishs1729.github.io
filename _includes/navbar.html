@@ -13,7 +13,6 @@
       {%- else -%}
         {%- assign home_active_status = "" -%}
       {%- endif -%}
-      <a class="nav-item nav-link {{ home_active_status }}" href="{{ '/' | relative_url }}">Home</a>
 
       {%- assign html_pages = site.html_pages | sort: 'weight' -%}
       {%- assign filtered_pages = "" | split: "" -%}
@@ -47,7 +46,7 @@
 
       {% for html_page in filtered_pages %}  
 
-        {%- if page.url contains html_page.url -%}
+        {%- if page.url == html_page.url -%}
           {%- assign active_status = "active" -%}
         {%- else -%}
           {%- assign active_status = "" -%}

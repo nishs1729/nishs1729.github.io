@@ -1,4 +1,4 @@
----
+<!-- ---
 layout: light_dark
 title: Resources
 permalink: /resources
@@ -6,7 +6,7 @@ weight: 4
 width: thin
 light_theme: moths
 dark_theme: stars
----
+--- -->
 
 take a look at this: [Vasudha's Resources](https://vasudha-kulkarni.github.io/resources)
 
