@@ -1,7 +1,9 @@
+@import 'theme';
+
 .markdown-body {
-  h1,
-  h2 {
+  h4 {
     margin-top: 32px;
+    @include themed(color, $project-title-light, $project-title-dark);
   }
 
   hr {
