@@ -1,6 +1,6 @@
 - name: Hodgekin-Huxley Model
   url: /neuroedtools/hh.html
-- name: Channel Dynammics
+- name: Stochastic Channel Dynammics
   url: /neuroedtools/channel.html
 # - name: Timezone Converter
 #   url: /neuroedtools/timezone.html
