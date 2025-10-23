@@ -1,0 +1,29 @@
+---
+layout: none
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/tools.css">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ '/assets/favicon.png' | relative_url }}">
+</head>
+<body>
+
+  {% include neurotools_header.html %}
+
+  <div class="container">
+    <div class="tools-grid">
+      {% for tool in site.data.neurotools %}
+        <a href="{{ tool.url | relative_url }}" class="tool-card">
+          <h3>{{ tool.name }}</h3>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+</html>

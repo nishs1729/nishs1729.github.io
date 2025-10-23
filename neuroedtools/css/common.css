@@ -1,0 +1,104 @@
+
+:root {
+  --bg: #f0f2f5;
+  --card-bg: #ffffff;
+  --text-color: #333;
+  --input-bg: #fff;
+  --input-border-color: #ccc;
+  --accent-color: #007bff;
+  --header-border: #ccc;
+  --header-bg: rgba(240, 242, 245, 0.8);
+  --info-box-bg: #e7f3fe;
+  --box-shadow-light: 0 0 10px rgba(0, 0, 0, 0.1);
+  --tool-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --tool-card-shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+  --control-h2: #e77;
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --card-bg: #1e1e1e;
+  --text-color: #fff;
+  --input-bg: #333;
+  --input-border-color: #555;
+  --header-border: #555;
+  --header-bg: rgba(0, 0, 0, 0.8);
+  --info-box-bg: #272727;
+  --box-shadow-dark: 0 0 10px rgba(0, 0, 0, 0.3);
+  --tool-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --tool-card-shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.4);
+  --control-h2: #5b5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; */
+  font-family: sans-serif;
+  background: var(--bg);
+  color: var(--text-color);
+  margin: 0;
+  padding-top: 60px; /* Add padding to body to avoid content being hidden by header */
+}
+
+input,
+select,
+textarea {
+  background: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+  /* width: 100%; */
+  box-sizing: border-box;
+}
+
+select {
+  width: auto;
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--info-box-bg);
+    border-radius: 5px;
+}
+
+input[type=range] {
+  margin: 10px 0;
+  padding: 0;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    transition: background 0.3s;
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 2px solid #4facfe;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 2px solid #4facfe;
+    border-radius: 50%;
+    cursor: pointer;
+}
