@@ -1,0 +1,14 @@
+- name: Hodgekin-Huxley Model
+  url: /neuroedtools/hh.html
+- name: Channel Dynammics
+  url: /neuroedtools/channel.html
+# - name: Timezone Converter
+#   url: /neuroedtools/timezone.html
+# - name: QR Code Generator
+#   url: /neuroedtools/qr.html
+# - name: Scribble
+#   url: /neuroedtools/scribble.html
+# - name: Pomodoro
+#   url: /neuroedtools/pomodoro.html
+# - name: Timer
+#   url: /neuroedtools/timer.html

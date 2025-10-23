@@ -6,6 +6,7 @@ plugins:
   - jemoji
   - jekyll-sass-converter
   - jekyll-gist
+  - jekyll-redirect-from
 
 exclude:
   - GEMINI.md

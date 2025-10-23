@@ -59,14 +59,3 @@ A central question was the role of the **endoplasmic reticulum (ER)** — the ce
 These findings point to a potential molecular mechanism for the synaptic dysfunction seen in Alzheimer’s and highlight how delicate calcium homeostasis is to the proper function of hippocampal circuits.
 
 _Key Finding:_ ER is essential for STP in CA3-CA1 synapses and its calcium dysregulation offers a mechanistic link between Alzheimer's pathology and memory impairment.
-
-<br>
-#### Publications
----
-
-{% for paper in site.data.papers %}
-1. **{{ paper.title }}** <br>
-{{ paper.authors }} <br>
-{{ paper.journal }} ({{ paper.year }}) [DOI]({{ paper.doi }}) | [PDF]({{ paper.pdf }})
-
-{% endfor %}

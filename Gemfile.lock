@@ -306,6 +306,7 @@ DEPENDENCIES
   github-pages
   jekyll
   jekyll-gist
+  jekyll-redirect-from
   jemoji
 
 BUNDLED WITH

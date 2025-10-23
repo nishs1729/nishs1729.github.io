@@ -3,7 +3,7 @@ layout: light_dark
 title: Resources
 permalink: /resources
 weight: 4
-width: thin
+width: thick
 light_theme: moths
 dark_theme: stars
 --- -->

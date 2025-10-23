@@ -2,7 +2,7 @@
 layout: light_dark
 permalink: /cv
 title: CV
-weight: 4
+weight: 6
 width: thick
 light_theme: rain
 dark_theme: stars
