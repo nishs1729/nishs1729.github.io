@@ -6,3 +6,5 @@
   url: /neuroedtools/channelzoo.html
 - name: Fitzhugh-Nagumo Model
   url: /neuroedtools/fhn.html
+- name: Izhikevich Model
+  url: /neuroedtools/izhikevich.html
