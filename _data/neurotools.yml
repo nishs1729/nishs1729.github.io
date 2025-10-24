@@ -2,8 +2,8 @@
   url: /neuroedtools/hh.html
 - name: Stochastic Channel Dynammics
   url: /neuroedtools/channel.html
-# - name: Timezone Converter
-#   url: /neuroedtools/timezone.html
+- name: Zoo of Ion Channels
+  url: /neuroedtools/channelzoo.html
 # - name: QR Code Generator
 #   url: /neuroedtools/qr.html
 # - name: Scribble

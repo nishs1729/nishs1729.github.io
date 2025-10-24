@@ -8,12 +8,7 @@ h1 {
 .controls h2:first-child {
     margin: 0;
 }
-.controls h2 {
-    color: var(--control-h2);
-}
-[data-theme="dark"] .controls h2 {
-    color: var(--control-h2);
-}
+
 .main-container {
     display: flex;
     flex-direction: row;
@@ -70,14 +65,6 @@ input[type="range"] {
     align-items: center;
     gap: 0px;
 }
-.img-group {
-    background-color: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 0 10px var(--box-shadow-light);
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-}
 .legend {
     display: flex;
     flex-direction: column;
@@ -105,46 +92,7 @@ input[type="range"] {
     margin: 0 auto;
 }
 
-[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
-    color: var(--text-color);
-}
-
-[data-theme="dark"] .controls,
-[data-theme="dark"] .plot-group,
-[data-theme="dark"] .img-group {
-    background-color: var(--card-bg);
-    box-shadow: 0 0 10px var(--box-shadow-dark);
-}
-
-[data-theme="dark"] .info-box {
-    background-color: var(--info-box-bg);
-    color: var(--text-color);
-}
-
-[data-theme="dark"] label {
-    color: var(--text-color);
-}
-
-/* Adjust slider styles for dark theme if necessary */
-[data-theme="dark"] input[type="range"] {
-    /* -webkit-appearance: none; */
-    background: var(--input-bg);
-    border-radius: 5px;
-}
-
-[data-theme="dark"] input[type="range"]::-webkit-slider-thumb {
-    background: var(--accent-color);
-}
-
-[data-theme="dark"] input[type="range"]::-moz-range-thumb {
-    background: var(--accent-color);
-}
-
 /* Canvas text and lines */
 [data-theme="dark"] canvas {
     filter: invert(1) hue-rotate(180deg); /* Invert colors for canvas content */
-}
-
-[data-theme="dark"] .img-group img {
-    filter: invert(88.3%);
 }

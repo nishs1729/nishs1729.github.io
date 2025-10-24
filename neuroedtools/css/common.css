@@ -2,6 +2,7 @@
   --bg: #f0f2f5;
   --card-bg: #ffffff;
   --text-color: #333;
+  --controls-h2: #fd8383;
   --input-bg: #fff;
   --input-border-color: #ccc;
   --accent-color: #007bff;
@@ -17,12 +18,14 @@
   --beta-h-color: #20c997;
   --open-channel-color: #28a745;
   --current-color: #6f42c1;
+  --ode-color: #007bff; /* A distinct blue for ODE plots */
 }
 
 [data-theme="dark"] {
   --bg: #000000;
   --card-bg: #1e1e1e;
   --text-color: #fff;
+  --controls-h2: #5dce70;
   --input-bg: #333;
   --input-border-color: #555;
   --header-border: #555;
@@ -37,6 +40,7 @@
   --beta-h-color: #199d7c;
   --open-channel-color: #38c172;
   --current-color: #9b6dff;
+  --ode-color: #66b3ff; /* A distinct light blue for ODE plots in dark theme */
 }
 
 * {
@@ -67,6 +71,13 @@ textarea {
   box-sizing: border-box;
 }
 
+.controls h2 {
+    color: var(--controls-h2);
+}
+[data-theme="dark"] .controls h2 {
+    color: var(--controls-h2);
+}
+
 select {
   width: auto;
 }
@@ -76,6 +87,15 @@ select {
     padding: 15px;
     background-color: var(--info-box-bg);
     border-radius: 5px;
+}
+
+.img-group {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 0 10px var(--box-shadow-light);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
 }
 
 input[type=range] {
@@ -113,4 +133,43 @@ input[type=range] {
     border: 2px solid #4facfe;
     border-radius: 50%;
     cursor: pointer;
+}
+
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .controls,
+[data-theme="dark"] .plot-group,
+[data-theme="dark"] .img-group {
+    background-color: var(--card-bg);
+    box-shadow: 0 0 10px var(--box-shadow-dark);
+}
+
+[data-theme="dark"] .info-box {
+    background-color: var(--info-box-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] label {
+    color: var(--text-color);
+}
+
+/* Adjust slider styles for dark theme if necessary */
+[data-theme="dark"] input[type="range"] {
+    /* -webkit-appearance: none; */
+    background: var(--input-bg);
+    border-radius: 5px;
+}
+
+[data-theme="dark"] input[type="range"]::-webkit-slider-thumb {
+    background: var(--accent-color);
+}
+
+[data-theme="dark"] input[type="range"]::-moz-range-thumb {
+    background: var(--accent-color);
+}
+
+[data-theme="dark"] img {
+    filter: invert(88.3%);
 }
