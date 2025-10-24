@@ -4,11 +4,5 @@
   url: /neuroedtools/channel.html
 - name: Zoo of Ion Channels
   url: /neuroedtools/channelzoo.html
-# - name: QR Code Generator
-#   url: /neuroedtools/qr.html
-# - name: Scribble
-#   url: /neuroedtools/scribble.html
-# - name: Pomodoro
-#   url: /neuroedtools/pomodoro.html
-# - name: Timer
-#   url: /neuroedtools/timer.html
+- name: Fitzhugh-Nagumo Model
+  url: /neuroedtools/fhn.html
