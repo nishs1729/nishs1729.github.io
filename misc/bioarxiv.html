@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>bioRxiv</title>
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --fg: #212529;
+    --border: #dee2e6;
+    --primary: #007bff;
+    --query: #36bcfa;
+    --primary-hover: #0056b3;
+    --card-bg: #fff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--fg);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    line-height: 1.6;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .controls-container {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .query-input-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  select {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  }
+
+  textarea {
+    padding: 0.75rem;
+    height: 1.4em;
+    overflow: hidden;
+    resize: none;
+    flex-grow: 1;
+    border: 3px solid var(--query);
+    border-radius: 30px;
+    background-color: var(--bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-grow: 1;
+    transition: background-color 0.2s;
+  }
+
+  button:hover {
+    background-color: var(--primary-hover);
+  }
+
+  .results-container {
+    margin-top: 2rem;
+  }
+
+  .article {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s;
+  }
+
+  .article:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #343a40;
+  }
+
+  .authors {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+    font-style: italic;
+  }
+
+  .abstract {
+    color: #495057;
+    margin: 1rem 0;
+  }
+
+  .article a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .article a:hover {
+    text-decoration: underline;
+  }
+
+  .status {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+    color: #6c757d;
+  }
+
+  .status.error {
+    color: red;
+    font-weight: bold;
+  }
+
+  mark {
+    background-color: #ffd277;
+    border-radius: 3px;
+    padding: 2px 4px;
+  }
+</style>
+</head>
+
+<body>
+
+<main>
+  <div class="controls-container">
+    <div class="query-input-group">
+      <textarea id="query">(synapse | neuronal | hippocampus | cortex)</textarea>
+    </div>
+    
+    <div class="controls">
+      <div>
+        <button onclick="runSearchConcurrent()">Search</button>
+      </div>
+      <div>
+        <select id="days">
+          <option value="1" selected>Last 24h</option>
+          <option value="2">Last 2 days</option>
+          <option value="7">Last 7 days</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div id="status" class="status"></div>
+  
+  <div class="results-container" id="results"></div>
+</main>
+
+<script>
+/* ================================
+   Boolean Query Parser
+   ================================ */
+class BooleanQuery {
+  constructor(query) {
+    this.tokens = this.tokenize(query);
+    this.pos = 0;
+    this.ast = this.parseExpression();
+  }
+
+  tokenize(q) {
+    const regex = /\(|\)|\&|\||!|"[^"]+"|[a-zA-Z0-9_-]+/g;
+    return (q.match(regex) || []).map(t => {
+      if (t === "&") return ["AND", t];
+      if (t === "|") return ["OR", t];
+      if (t === "!") return ["NOT", t];
+      if (t === "(") return ["LPAREN", t];
+      if (t === ")") return ["RPAREN", t];
+      if (t.startsWith('"')) return ["PHRASE", t.slice(1, -1)];
+      return ["WORD", t];
+    });
+  }
+
+  parseExpression() {
+    let n = this.parseTerm();
+    while (this.peek("OR")) {
+      this.consume("OR");
+      n = ["OR", n, this.parseTerm()];
+    }
+    return n;
+  }
+
+  parseTerm() {
+    let n = this.parseFactor();
+    while (this.peek("AND")) {
+      this.consume("AND");
+      n = ["AND", n, this.parseFactor()];
+    }
+    return n;
+  }
+
+  parseFactor() {
+    if (this.peek("NOT")) {
+      this.consume("NOT");
+      return ["NOT", this.parseFactor()];
+    }
+    if (this.peek("LPAREN")) {
+      this.consume("LPAREN");
+      const n = this.parseExpression();
+      this.consume("RPAREN");
+      return n;
+    }
+    return this.parseAtom();
+  }
+
+  parseAtom() {
+    const t = this.consumeAny("WORD", "PHRASE");
+    return ["TERM", t[1].toLowerCase()];
+  }
+
+  evaluate(text) {
+    return this.evalNode(this.ast, text.toLowerCase());
+  }
+
+  evalNode(n, text) {
+    const [k, a, b] = n;
+    if (k === "TERM") return text.includes(a);
+    if (k === "AND") return this.evalNode(a, text) && this.evalNode(b, text);
+    if (k === "OR") return this.evalNode(a, text) || this.evalNode(b, text);
+    if (k === "NOT") return !this.evalNode(a, text);
+  }
+
+  peek(k) {
+    return this.pos < this.tokens.length && this.tokens[this.pos][0] === k;
+  }
+
+  consume(k) {
+    if (!this.peek(k)) throw `Expected ${k}`;
+    return this.tokens[this.pos++];
+  }
+
+  consumeAny(...k) {
+    if (this.pos < this.tokens.length && k.includes(this.tokens[this.pos][0])) {
+      return this.tokens[this.pos++];
+    }
+    throw `Expected ${k}`;
+  }
+}
+
+/* ================================
+   Highlighting helpers
+   ================================ */
+function extractPositiveTerms(query) {
+  const tokens = query.match(/"[^"]+"|[a-zA-Z0-9_-]+/g) || [];
+  return tokens
+    .filter(t => !["AND", "OR", "NOT"].includes(t.toUpperCase()))
+    .map(t => t.replace(/"/g, "").toLowerCase());
+}
+
+function highlight(text, terms) {
+  let out = text;
+  // Use a Set for faster lookups and to avoid re-highlighting
+  const uniqueTerms = [...new Set(terms)];
+  for (const t of uniqueTerms) {
+    // Word boundary `\b` ensures we match whole words, but be careful
+    // as it might not be what's wanted for things like gene names.
+    // Using a simpler regex for broader matching.
+    const r = new RegExp(`(${t.replace(/[-\/\\^$*+?.()|[\\]{}]/g, '\\{new_string}')})`, "gi");
+    out = out.replace(r, "<mark>$1</mark>");
+  }
+  return out;
+}
+
+/* ================================
+   UI logic
+   ================================ */
+
+const ABSTRACT_WORD_LIMIT = 70;
+
+function truncateAbstract(text, limit) {
+  const words = text.split(" ");
+  if (words.length > limit) {
+    return words.slice(0, limit).join(" ") + "…";
+  }
+  return text;
+}
+
+function toggleAbstract(event, fullAbstract) {
+  event.preventDefault(); // Prevent page from jumping to top
+  const abstractDiv = event.target.closest(".abstract");
+  const currentText = abstractDiv.querySelector(".abstract-text");
+  const toggleButton = event.target;
+
+  if (toggleButton.textContent === "more") {
+    currentText.innerHTML = fullAbstract;
+    toggleButton.textContent = "less";
+  } else {
+    const truncatedText = truncateAbstract(fullAbstract, ABSTRACT_WORD_LIMIT);
+    currentText.innerHTML = truncatedText;
+    toggleButton.textContent = "more";
+  }
+}
+
+function applyPreset() {
+  const v = document.getElementById("preset").value;
+  if (v) document.getElementById("query").value = v;
+}
+
+async function runSearchConcurrent() {
+  const qText = document.getElementById("query").value;
+  const days = parseInt(document.getElementById("days").value);
+  const status = document.getElementById("status");
+  const results = document.getElementById("results");
+
+  // Save the query to localStorage
+  localStorage.setItem("biorxiv_query", qText);
+
+  results.innerHTML = "";
+  status.textContent = "Fetching bioRxiv articles…";
+
+  const end = new Date();
+  const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+  const fmt = d => d.toISOString().slice(0, 10);
+
+  let hits = 0;
+  let scannedCount = 0;
+
+  try {
+    const query = new BooleanQuery(qText);
+    const terms = extractPositiveTerms(qText);
+
+    // Initial fetch to get total count
+    const initialUrl = `https://api.biorxiv.org/details/biorxiv/${fmt(start)}/${fmt(end)}/0`;
+    const initialResponse = await fetch(initialUrl);
+    if (!initialResponse.ok) throw new Error(`HTTP error! status: ${initialResponse.status}`);
+    const initialData = await initialResponse.json();
+    const totalCount = initialData.messages[0].total;
+
+    if (totalCount === 0) {
+      status.textContent = "No articles found in the selected time window.";
+      return;
+    }
+    
+    const articlesPerRequest = initialData.collection.length;
+    const urls = [];
+    for (let i = 0; i < totalCount; i += articlesPerRequest) {
+      urls.push(`https://api.biorxiv.org/details/biorxiv/${fmt(start)}/${fmt(end)}/${i}`);
+    }
+
+    for (const url of urls) {
+      const response = await fetch(url);
+      if (!response.ok) {
+        // In case of an error with one of the fetches, log it and continue
+        console.error(`HTTP error! status: ${response.status} for url: ${url}`);
+        continue;
+      }
+      const data = await response.json();
+      const articles = data.collection || [];
+      scannedCount += articles.length;
+
+      for (const a of articles) {
+        const title = a.title || "";
+        const abstract = a.abstract || "";
+        const searchText = `${title} ${abstract}`;
+
+        if (!query.evaluate(searchText)) continue;
+
+        hits++;
+
+        const fullAbstract = highlight(abstract, terms);
+        const truncatedAbstract = truncateAbstract(fullAbstract, ABSTRACT_WORD_LIMIT);
+        const isTruncated = abstract.split(" ").length > ABSTRACT_WORD_LIMIT;
+
+        const div = document.createElement("div");
+        div.className = "article";
+        div.innerHTML = `
+          <div class="title">${highlight(title, terms)}</div>
+          <div class="authors">${a.authors || "No authors listed"}</div>
+          <div class="abstract">
+            <span class="abstract-text">${truncatedAbstract}</span>
+            ${isTruncated ? `<a href="#" class="abstract-toggle" onclick="toggleAbstract(event, \`${fullAbstract.replace(/`/g, '\\`')}\`)">more</a>` : ''}
+          </div>
+          <a href="https://www.biorxiv.org/content/${a.doi}v${a.version}" target="_blank" rel="noopener noreferrer">
+            View on bioRxiv
+          </a>
+        `;
+        results.appendChild(div);
+      }
+      status.textContent = `Scanned ${scannedCount} of ${totalCount} articles — found ${hits} match${hits !== 1 ? 'es' : ''}.`;
+    }
+
+    status.textContent = `Finished. Scanned ${scannedCount} articles and found ${hits} match${hits !== 1 ? 'es' : ''}.`;
+
+  } catch (error) {
+    console.error("Search failed:", error);
+    status.textContent = "Failed to fetch articles. See console for details.";
+  }
+}
+
+async function runSearch() {
+  const qText = document.getElementById("query").value;
+  const days = parseInt(document.getElementById("days").value);
+  const status = document.getElementById("status");
+  const results = document.getElementById("results");
+
+  // Save the query to localStorage
+  localStorage.setItem("biorxiv_query", qText);
+
+  results.innerHTML = "";
+  status.textContent = "Fetching bioRxiv articles…";
+
+  const end = new Date();
+  const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+  const fmt = d => d.toISOString().slice(0, 10);
+
+  let cursor = 0;
+  let totalCount = 0;
+  let scannedCount = 0;
+  let hits = 0;
+
+  try {
+    const query = new BooleanQuery(qText);
+    const terms = extractPositiveTerms(qText);
+
+    while (true) {
+      const url = `https://api.biorxiv.org/details/biorxiv/${fmt(start)}/${fmt(end)}/${cursor}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const articles = data.collection || [];
+
+      scannedCount += articles.length;
+
+      if (data.messages && data.messages.length > 0) {
+        totalCount = data.messages[0].total;
+      }
+      
+      for (const a of articles) {
+        const title = a.title || "";
+        const abstract = a.abstract || "";
+        const searchText = `${title} ${abstract}`;
+
+        if (!query.evaluate(searchText)) continue;
+
+        hits++;
+
+        const fullAbstract = highlight(abstract, terms);
+        const truncatedAbstract = truncateAbstract(fullAbstract, ABSTRACT_WORD_LIMIT);
+        const isTruncated = abstract.split(" ").length > ABSTRACT_WORD_LIMIT;
+
+
+        const div = document.createElement("div");
+        div.className = "article";
+        div.innerHTML = `
+          <div class="title">${highlight(title, terms)}</div>
+          <div class="authors">${a.authors || "No authors listed"}</div>
+          <div class="abstract">
+            <span class="abstract-text">${truncatedAbstract}</span>
+            ${isTruncated ? `<a href="#" class="abstract-toggle" onclick="toggleAbstract(event, \`${fullAbstract.replace(/`/g, '\\`')}\`)">more</a>` : ''}
+          </div>
+          <a href="https://www.biorxiv.org/content/${a.doi}v${a.version}" target="_blank" rel="noopener noreferrer">
+            View on bioRxiv
+          </a>
+        `;
+        results.appendChild(div);
+      }
+
+      status.textContent = `Scanned ${scannedCount} of ${totalCount} articles — found ${hits} match${hits !== 1 ? 'es' : ''}.`;
+      
+      if (articles.length === 0 || (totalCount > 0 && scannedCount >= totalCount)) {
+        break;
+      }
+      
+      cursor += articles.length;
+    }
+
+    if (scannedCount === 0) {
+      status.textContent = "No articles found in the selected time window.";
+    } else {
+      status.textContent = `Finished. Scanned ${scannedCount} articles and found ${hits} match${hits !== 1 ? 'es' : ''}.`;
+    }
+
+  } catch (error) {
+    console.error("Search failed:", error);
+    status.textContent = "Failed to fetch articles. Please check your query and try again.";
+  }
+}
+
+// Automatically run search on load
+document.addEventListener("DOMContentLoaded", () => {
+  const savedQuery = localStorage.getItem("biorxiv_query");
+  if (savedQuery) {
+    document.getElementById("query").value = savedQuery;
+  }
+  runSearchConcurrent();
+});
+
+</script>
+
+</body>
+</html>
