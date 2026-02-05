@@ -101,6 +101,23 @@
     background-color: var(--primary-hover);
   }
 
+  #toggle-example-queries-button {
+    background-color: var(--primary);
+    color: #fff;
+  }
+
+  #toggle-example-queries-button:hover {
+    background-color: var(--primary-hover);
+  }
+
+  #example-queries-content {
+    margin-top: 0.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--card-bg);
+  }
+
   .results-container {
     margin-top: 2rem;
   }
@@ -191,13 +208,13 @@
         </select>
       </div>
       <div id="example-queries-container">
-        <button onclick="toggleExampleQueries()" style="width: 100%; padding: 0.8rem 1rem; font-size: 1.1rem; font-weight: 600; color: #fff; background-color: #6c757d; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s;">
+        <button id="toggle-example-queries-button">
           Example Queries
         </button>
       </div>
     </div>
 
-    <div id="example-queries-content" class="hidden" style="margin-top: 0.5rem; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background-color: var(--card-bg);">
+    <div id="example-queries-content" class="hidden">
       <p><strong>Simple keyword search:</strong> <code>CRISPR</code></p>
       <p><strong>Multiple keywords (OR implicitly):</strong> <code>COVID-19 vaccine efficacy</code></p>
       <p><strong>Boolean AND:</strong> <code>(CRISPR & brain)</code></p>
@@ -361,13 +378,11 @@ function toggleAbstract(event, fullAbstract) {
 function toggleExampleQueries() {
   const content = document.getElementById("example-queries-content");
   content.classList.toggle("hidden");
-  const button = document.querySelector("#example-queries-container button");
+  const button = document.getElementById("toggle-example-queries-button"); // Changed to use getElementById
   if (content.classList.contains("hidden")) {
     button.textContent = "Example Queries";
-    button.style.backgroundColor = "#6c757d"; // Reset to default gray
   } else {
     button.textContent = "Hide Examples";
-    button.style.backgroundColor = "var(--primary-hover)"; // Change color when open
   }
 }
 
@@ -418,48 +433,66 @@ async function runSearchConcurrent() {
       urls.push(`https://api.biorxiv.org/details/biorxiv/${fmt(start)}/${fmt(end)}/${i}`);
     }
 
-    for (const url of urls) {
-      const response = await fetch(url);
-      if (!response.ok) {
-        // In case of an error with one of the fetches, log it and continue
-        console.error(`HTTP error! status: ${response.status} for url: ${url}`);
-        continue;
+    const fetchPromises = urls.map(async url => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status} for url: ${url}`);
+        }
+        return response.json();
+      } catch (error) {
+        console.error("Error fetching URL:", error);
+        return { error: true, message: error.message, url: url };
       }
-      const data = await response.json();
-      const articles = data.collection || [];
-      scannedCount += articles.length;
+    });
 
-      for (const a of articles) {
-        const title = a.title || "";
-        const abstract = a.abstract || "";
-        const searchText = `${title} ${abstract}`;
+    const resultsResponses = await Promise.allSettled(fetchPromises);
 
-        if (!query.evaluate(searchText)) continue;
+    // Reset scannedCount and hits as they will be re-accumulated from concurrent results
+    scannedCount = 0;
+    hits = 0;
 
-        hits++;
+    for (const result of resultsResponses) {
+      if (result.status === "fulfilled" && !result.value.error) {
+        const data = result.value;
+        const articles = data.collection || [];
+        scannedCount += articles.length;
 
-        const fullAbstract = highlight(abstract, terms);
-        const truncatedAbstract = truncateAbstract(fullAbstract, ABSTRACT_WORD_LIMIT);
-        const isTruncated = abstract.split(" ").length > ABSTRACT_WORD_LIMIT;
+        for (const a of articles) {
+          const title = a.title || "";
+          const abstract = a.abstract || "";
+          const searchText = `${title} ${abstract}`;
 
-        const div = document.createElement("div");
-        div.className = "article";
-        div.innerHTML = `
-          <div class="title">${highlight(title, terms)}</div>
-          <div class="authors">${a.authors || "No authors listed"}</div>
-          <div class="abstract">
-            <span class="abstract-text">${truncatedAbstract}</span>
-            ${isTruncated ? `<a href="#" class="abstract-toggle" onclick="toggleAbstract(event, \`${fullAbstract.replace(/`/g, '\\`')}\`)">more</a>` : ''}
-          </div>
-          <a href="https://www.biorxiv.org/content/${a.doi}v${a.version}" target="_blank" rel="noopener noreferrer">
-            View on bioRxiv
-          </a>
-        `;
-        results.appendChild(div);
+          if (!query.evaluate(searchText)) continue;
+
+          hits++;
+
+          const fullAbstract = highlight(abstract, terms);
+          const truncatedAbstract = truncateAbstract(fullAbstract, ABSTRACT_WORD_LIMIT);
+          const isTruncated = abstract.split(" ").length > ABSTRACT_WORD_LIMIT;
+
+          const div = document.createElement("div");
+          div.className = "article";
+          div.innerHTML = `
+            <div class="title">${highlight(title, terms)}</div>
+            <div class="authors">${a.authors || "No authors listed"}</div>
+            <div class="abstract">
+              <span class="abstract-text">${truncatedAbstract}</span>
+              ${isTruncated ? `<a href="#" class="abstract-toggle" onclick="toggleAbstract(event, \`${fullAbstract.replace(/`/g, '\\`')}\`)">more</a>` : ''}
+            </div>
+            <a href="https://www.biorxiv.org/content/${a.doi}v${a.version}" target="_blank" rel="noopener noreferrer">
+              View on bioRxiv
+            </a>
+          `;
+          results.appendChild(div);
+        }
+      } else if (result.status === "rejected") {
+        console.error("Promise rejected:", result.reason);
+      } else if (result.value && result.value.error) {
+        console.error(`Failed to fetch data for URL ${result.value.url}:`, result.value.message);
       }
-      status.textContent = `Scanned ${scannedCount} of ${totalCount} articles — found ${hits} match${hits !== 1 ? 'es' : ''}.`;
     }
-
+    // Final status update after all concurrent fetches and processing
     status.textContent = `Finished. Scanned ${scannedCount} articles and found ${hits} match${hits !== 1 ? 'es' : ''}.`;
 
   } catch (error) {
@@ -569,6 +602,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("query").value = savedQuery;
   }
   runSearchConcurrent();
+
+  const toggleButton = document.getElementById("toggle-example-queries-button");
+  if (toggleButton) {
+    toggleButton.addEventListener("click", toggleExampleQueries);
+  }
 });
 
 document.getElementById("query").addEventListener("keypress", function (event) {
