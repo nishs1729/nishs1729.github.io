@@ -164,6 +164,10 @@
     border-radius: 3px;
     padding: 2px 4px;
   }
+
+  .hidden {
+    display: none;
+  }
 </style>
 </head>
 
@@ -186,6 +190,22 @@
           <option value="7">Last 7 days</option>
         </select>
       </div>
+      <div id="example-queries-container">
+        <button onclick="toggleExampleQueries()" style="width: 100%; padding: 0.8rem 1rem; font-size: 1.1rem; font-weight: 600; color: #fff; background-color: #6c757d; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s;">
+          Example Queries
+        </button>
+      </div>
+    </div>
+
+    <div id="example-queries-content" class="hidden" style="margin-top: 0.5rem; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background-color: var(--card-bg);">
+      <p><strong>Simple keyword search:</strong> <code>CRISPR</code></p>
+      <p><strong>Multiple keywords (OR implicitly):</strong> <code>COVID-19 vaccine efficacy</code></p>
+      <p><strong>Boolean AND:</strong> <code>(CRISPR & brain)</code></p>
+      <p><strong>Boolean OR:</strong> <code>(neuronal | hippocampus)</code></p>
+      <p><strong>Boolean NOT:</strong> <code>(epigenetics !cancer)</code></p>
+      <p><strong>Phrase search:</strong> <code>"gene editing"</code></p>
+      <p><strong>Combined query:</strong> <code>("machine learning" & neuroscience) | (AI & "brain imaging")</code></p>
+      <p><strong>Complex example:</strong> <code>((CRISPR & "off-target") | ("prime editing" & efficiency)) & !(review | meta-analysis)</code></p>
     </div>
   </div>
 
@@ -335,6 +355,19 @@ function toggleAbstract(event, fullAbstract) {
     const truncatedText = truncateAbstract(fullAbstract, ABSTRACT_WORD_LIMIT);
     currentText.innerHTML = truncatedText;
     toggleButton.textContent = "more";
+  }
+}
+
+function toggleExampleQueries() {
+  const content = document.getElementById("example-queries-content");
+  content.classList.toggle("hidden");
+  const button = document.querySelector("#example-queries-container button");
+  if (content.classList.contains("hidden")) {
+    button.textContent = "Example Queries";
+    button.style.backgroundColor = "#6c757d"; // Reset to default gray
+  } else {
+    button.textContent = "Hide Examples";
+    button.style.backgroundColor = "var(--primary-hover)"; // Change color when open
   }
 }
 
