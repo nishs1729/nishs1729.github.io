@@ -10,7 +10,6 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -22,48 +21,24 @@ body{
     color:#333;
 }
 
-/* HEADER */
-
-header{
-    background:linear-gradient(135deg,#2c3e50,#34495e);
-    color:white;
-    padding:22px 30px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.15);
-}
-
-header h1{
-    margin:0 0 6px 0;
-    font-size:26px;
-}
-
-header p{
-    margin:0;
-    font-size:14px;
-    opacity:0.9;
-}
-
-/* MAIN LAYOUT */
-
 .container{
     display:flex;
-    height:calc(100vh - 160px);
+    height:100vh;
+    position:relative;
 }
-
-/* MAP */
-
-#map{
-    flex:1;
-}
-
-/* RIGHT SIDEBAR */
 
 .sidebar{
     width:320px;
+    min-width:320px;
     background:white;
-    border-left:1px solid #e2e6ef;
-    padding:22px;
+    border-right:1px solid #e2e6ef;
+    padding:12px;
     overflow-y:auto;
-    box-shadow:-2px 0 8px rgba(0,0,0,0.05);
+    transition:width .3s ease, padding .3s ease;
+}
+
+.sidebar.hidden{
+    display:none;
 }
 
 .sidebar h2{
@@ -79,139 +54,194 @@ header p{
     border:1px solid #e5e9f2;
 }
 
-/* FOOTER */
-
-footer{
-    height:50px;
-    background:#ffffff;
-    border-top:1px solid #e2e6ef;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    font-size:13px;
-    color:#555;
+#map{
+    flex:1;
 }
 
-footer a{
-    color:#2c6bed;
-    text-decoration:none;
+.toggle-btn{
+    position:absolute;
+    bottom:20px;
+    left:20px;   /* sits just to the right of sidebar */
+    z-index:1000;
+    background:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
+    cursor:pointer;
+    transition:left .3s ease;
 }
 
-footer a:hover{
-    text-decoration:underline;
+.btn{
+    background:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    box-shadow:0 2px 6px rgba(0,0,0,.2);
+    cursor:pointer;
+    transition:left .1s ease;
 }
 
+.sidebar.hidden + #map + .toggle-btn{
+    left:20px;
+}
+
+.section-title{
+    cursor:pointer;
+    font-weight:600;
+    margin-bottom:15px;
+}
+
+.section-content{
+    display:none;
+}
+
+.section-content.active{
+    display:block;
+}
+
+.expert{
+    padding:6px 8px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.expert:hover{
+    background:#eef2ff;
+}
 </style>
 </head>
 
 <body>
-
-<header>
-<h1>Expert Location Map</h1>
-<p>This map shows the geographic locations of experts in various fields.
-Click on a marker to view name, contact details, and metadata.</p>
-</header>
-
 <div class="container">
+    <div class="sidebar" id="sidebar">
+        <p><strong>Expert Location Map</strong></p>
+        <div class="info-card">
+            <p>This map shows the geographic locations of experts in various fields.
+               Click on a marker to view name, contact details, and metadata.</p>
+        </div>
 
-<div id="map"></div>
-
-<div class="sidebar">
-<h2>Information</h2>
-
-
-<div class="info-card">
-<strong>Instructions</strong>
-<p>Click a marker on the map to see expert details.</p>
+        <div class="info-card">
+            <strong>Instructions</strong>
+            <p>Click a marker or a name in the list.</p>
+        </div>
+        
+        <div class="info-card">
+            <strong>Data Source</strong>
+            <p>Expert data is loaded dynamically from a CSV file.</p>
+            <a href="data.csv" download><button class="btn">Download CSV</button></a>
+        </div>
+        
+        <div class="info-card">
+            
+            <div class="section-title" onclick="toggleSection('expertList')">
+                <strong>☰&nbsp; Expert List</strong>
+                
+            </div>
+            
+            <div id="expertList" class="section-content active"></div>
+        </div>
+    </div>
+    
+    <div id="map"></div>
+    
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 </div>
-
-<div class="info-card">
-<strong>Data Source</strong>
-<p>Expert data is loaded dynamically from a CSV file.</p>
-</div>
-
-</div>
-
-</div>
-
-<footer>
-<div>© 2026 Expert Mapping Project</div>
-<div>Built with Leaflet • Data from CSV</div>
-</footer>
 
 <script>
-    var map = L.map("map").setView([22.5, 80], 5);
+var map = L.map("map").setView([22.5, 80], 5);
 
-    var osmLayer = L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-            attribution: "© OpenStreetMap contributors"
-        }
-    );
+var osmLayer = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    { attribution: "© OpenStreetMap contributors" }
+);
 
-    var satelliteLayer = L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        {
-            attribution:
-                "Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye"
-        }
-    );
+var satelliteLayer = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "Tiles © Esri" }
+);
 
-    var labelLayer = L.tileLayer(
-        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-        {
-            attribution: "© Esri"
-        }
-    );
+var labelLayer = L.tileLayer(
+    "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "© Esri" }
+);
 
-    var satelliteWithLabels = L.layerGroup([
-        satelliteLayer,
-        labelLayer
-    ]);
+var satelliteWithLabels = L.layerGroup([satelliteLayer,labelLayer]);
 
-    osmLayer.addTo(map);
-    var baseLayers = {
-        "Street Map": osmLayer,
-        "Satellite": satelliteLayer,
-        "Satellite + Labels": satelliteWithLabels
-    };
-    L.control.layers(baseLayers).addTo(map);
+osmLayer.addTo(map);
 
-    Papa.parse("data.csv", {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            addMarkers(results.data);
-        }
-    });
+var baseLayers = {
+    "Street Map": osmLayer,
+    // "Satellite": satelliteLayer,
+    "Satellite": satelliteWithLabels
+};
 
-    function addMarkers(data) {
-        data.forEach(function(person) {
-            var popup = "<b>" + person.name + "</b><br>";
-            popup += "Contact: " + person.contact + "<br>";
+L.control.layers(baseLayers).addTo(map);
 
-            for (var key in person) {
-                if (
-                    key !== "name" &&
-                    key !== "contact" &&
-                    key !== "lat" &&
-                    key !== "lon" &&
-                    person[key] !== ""
-                ) {
-                    popup += key + ": " + person[key] + "<br>";
-                }
-            }
+var markers = {};
 
-            L.marker([
-                parseFloat(person.lat),
-                parseFloat(person.lon)
-            ])
-            .addTo(map)
-            .bindPopup(popup);
-        });
+/* Sidebar toggle */
+function toggleSidebar(){
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("hidden");
+    map.invalidateSize();
+}
+
+/* Section toggle */
+function toggleSection(id){
+    document.getElementById(id).classList.toggle("active");
+}
+
+/* Load CSV */
+Papa.parse("data.csv", {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+        addMarkers(results.data);
     }
+});
+
+function addMarkers(data) {
+    data.forEach(function(person) {
+        var popup = "<b>" + person.name + "</b><br>";
+        popup += "Contact: " + person.contact + "<br>";
+
+        for (var key in person) {
+            if (
+                key !== "name" &&
+                key !== "contact" &&
+                key !== "lat" &&
+                key !== "lon" &&
+                person[key] !== ""
+            ) {
+                popup += key + ": " + person[key] + "<br>";
+            }
+        }
+
+        var marker = L.marker([
+            parseFloat(person.lat),
+            parseFloat(person.lon)
+        ])
+        .addTo(map)
+        .bindPopup(popup);
+
+        markers[person.name] = marker;
+
+        /* Add name to sidebar list */
+        var div = document.createElement("div");
+        div.className = "expert";
+        div.innerText = person.name;
+
+        div.onclick = function(){
+            map.setView(marker.getLatLng(), 6);
+            marker.openPopup();
+        };
+
+        document.getElementById("expertList").appendChild(div);
+    });
+}
 </script>
 </body>
 </html>
