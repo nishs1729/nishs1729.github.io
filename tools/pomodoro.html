@@ -6,7 +6,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pomodoro</title>
+  <meta name="description" content="A calm, minimal Pomodoro timer with customizable sessions and progress tracking." />
+  <title>Pomodoro Timer</title>
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/pomodoro.css">
   <link rel="shortcut icon" type="image/x-icon" href="{{ '/assets/favicon.png' | relative_url }}">
@@ -15,47 +16,143 @@
 
   {% include tools_header.html %}
 
-  <div class="wrap">
-    <div class="card" role="application" aria-label="Pomodoro timer">
-      <h1>Pomodoro Timer</h1>
-      <div class="sub">Default 25 minutes — change the length and press Start. Keeps accurate time even when the tab is inactive.</div>
+  <!-- Notification toast -->
+  <div class="pm-notification" id="pmNotif" role="status" aria-live="polite"></div>
 
-      <div class="display" id="display">25:00</div>
+  <div class="pm-wrap">
+    <main class="pm-app" role="main">
 
-      <div class="small">
-        <label>
-          Duration (minutes)
-          <input id="minutesInput" type="number" min="1" max="180" step="1" value="25" aria-label="minutes input" />
-        </label>
-        <label>
-          Auto-restart
-          <input id="autorestart" type="checkbox" aria-label="auto restart" />
-        </label>
-      </div>
+      <!-- Mode selector -->
+      <nav class="pm-modes" role="tablist" aria-label="Session mode">
+        <button class="pm-mode-btn active" data-mode="focus"  role="tab" aria-selected="true"  id="modeTabFocus">Focus</button>
+        <button class="pm-mode-btn"        data-mode="short"  role="tab" aria-selected="false" id="modeTabShort">Short Break</button>
+        <button class="pm-mode-btn"        data-mode="long"   role="tab" aria-selected="false" id="modeTabLong">Long Break</button>
+      </nav>
 
-      <div class="controls">
-        <button id="startBtn" class="positive">Start</button>
-        <button id="pauseBtn">Pause</button>
-        <button id="resetBtn" class="warn">Reset</button>
-      </div>
+      <!-- Timer card -->
+      <section class="pm-timer-card" aria-label="Pomodoro timer">
+        <div class="pm-session-label" id="sessionLabel">Focus Time</div>
 
-      <div class="row">
-        <button id="shortBtn">Short (5)</button>
-        <button id="longBtn">Long (15)</button>
-        <button id="setNowBtn">Set to current time</button>
-      </div>
+        <!-- Circular ring -->
+        <div class="pm-ring-wrap" role="img" aria-label="Timer progress">
+          <svg class="pm-ring-svg" viewBox="0 0 220 220" aria-hidden="true">
+            <circle class="pm-ring-track"    cx="110" cy="110" r="100" />
+            <circle class="pm-ring-progress" cx="110" cy="110" r="100" id="ringProgress" />
+          </svg>
+          <div class="pm-time-display">
+            <div class="pm-time-text" id="timeDisplay" aria-live="polite" aria-atomic="true">25:00</div>
+            <div class="pm-cycle-dots" id="cycleDots" aria-label="Cycle progress"></div>
+            <div class="pm-swipe-hint" id="swipeHint" aria-hidden="true">
+              <div class="pm-swipe-hint-arrows">&#8593;&thinsp;&#8595;</div>
+              <div class="pm-swipe-hint-label">swipe</div>
+            </div>
+          </div>
+        </div>
 
-      <div class="hint">When timer finishes it will vibrate (mobile) and show a notification if you allow it. It uses absolute timestamps so it remains correct when the browser tab is backgrounded or the device screen is turned off (unless the OS kills the browser process).</div>
 
-      <footer>
-        <div class="tiny">Saved locally. Works offline in the same tab. Uses notifications and vibration when available.</div>
-      </footer>
-    </div>
+        <!-- Controls -->
+        <div class="pm-controls">
+          <button class="pm-btn-icon" id="resetBtn"   aria-label="Reset timer (R)">↺</button>
+          <button class="pm-btn-play" id="startBtn"   aria-label="Start timer (Space)">▶</button>
+          <button class="pm-btn-icon" id="skipBtn"    aria-label="Skip to next session (S)">⏭</button>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="pm-stats" aria-label="Today's progress">
+        <div class="pm-stat">
+          <div class="pm-stat-value" id="statPomos">0</div>
+          <div class="pm-stat-label">Pomodoros</div>
+        </div>
+        <div class="pm-stat">
+          <div class="pm-stat-value" id="statFocusMins">0m</div>
+          <div class="pm-stat-label">Focus Time</div>
+        </div>
+        <div class="pm-stat">
+          <div class="pm-stat-value" id="statCycle">1</div>
+          <div class="pm-stat-label">Cycle</div>
+        </div>
+      </section>
+
+
+      <!-- Settings Panel (open by default) -->
+      <section class="pm-panel" aria-label="Settings">
+        <div class="pm-panel-header open" id="settingsHeader" role="button" aria-expanded="true" tabindex="0">
+          <div class="pm-panel-title">
+            <span class="pm-panel-icon">⚙️</span> Settings
+          </div>
+          <span class="pm-panel-chevron" aria-hidden="true">▾</span>
+        </div>
+        <div class="pm-panel-body open" id="settingsBody">
+          <div class="pm-settings-grid">
+            <div class="pm-field">
+              <label for="setFocus">Focus (min)</label>
+              <input id="setFocus" type="number" min="1" max="120" step="1" value="25" />
+            </div>
+            <div class="pm-field">
+              <label for="setShort">Short Break (min)</label>
+              <input id="setShort" type="number" min="1" max="60"  step="1" value="5" />
+            </div>
+            <div class="pm-field">
+              <label for="setLong">Long Break (min)</label>
+              <input id="setLong" type="number" min="1" max="120" step="1" value="15" />
+            </div>
+            <div class="pm-field">
+              <label for="setCycles">Cycles / Long Break</label>
+              <input id="setCycles" type="number" min="1" max="10"  step="1" value="4" />
+            </div>
+          </div>
+
+          <div class="pm-settings-toggles">
+            <label class="pm-toggle-row">
+              <span class="pm-toggle-label">
+                🔔 Sound alerts
+                <span class="pm-toggle-sublabel">Play a chime when session ends</span>
+              </span>
+              <span class="pm-switch">
+                <input type="checkbox" id="toggleSound" checked />
+                <span class="pm-switch-track"></span>
+              </span>
+            </label>
+
+            <label class="pm-toggle-row">
+              <span class="pm-toggle-label">
+                🔁 Auto-start next
+                <span class="pm-toggle-sublabel">Automatically begin the next session</span>
+              </span>
+              <span class="pm-switch">
+                <input type="checkbox" id="toggleAutostart" />
+                <span class="pm-switch-track"></span>
+              </span>
+            </label>
+
+            <label class="pm-toggle-row">
+              <span class="pm-toggle-label">
+                💬 Browser notifications
+                <span class="pm-toggle-sublabel">Show a notification when timer ends</span>
+              </span>
+              <span class="pm-switch">
+                <input type="checkbox" id="toggleNotify" checked />
+                <span class="pm-switch-track"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keyboard shortcuts hint -->
+      <p class="pm-shortcuts">
+        <kbd class="pm-kbd">Space</kbd> start/pause &nbsp;
+        <kbd class="pm-kbd">R</kbd> reset &nbsp;
+        <kbd class="pm-kbd">S</kbd> skip &nbsp;
+        <kbd class="pm-kbd">1</kbd><kbd class="pm-kbd">2</kbd><kbd class="pm-kbd">3</kbd> switch mode
+      </p>
+
+    </main>
   </div>
 
-  <audio id="bellSound" preload="auto">
-    <source src="data:audio/mp3;base64,SUQzAwAAAAAAFgAAABkAAAABAAACAAACAAACAAACAAACAAAC" type="audio/mpeg">
-  </audio>
+  <!-- Bell sound (minimal base64 WAV beep) -->
+  <audio id="bellSound" preload="auto"></audio>
 
   <script src="js/pomodoro.js"></script>
 </body>
